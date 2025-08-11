@@ -2,6 +2,7 @@ import React from "react";
 import { Hero } from "../components/home/hero";
 import { Trending } from "../components/home/trending";
 import { Popular } from "../components/home/popular";
+import { Deals } from "../components/home/deals";
 
 /**
  * @author
@@ -16,6 +17,8 @@ export const Home = (props) => {
       <Trending />
 
       <Popular />
+
+      <Deals />
     </div>
   );
 };

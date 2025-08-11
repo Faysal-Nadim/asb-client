@@ -40,7 +40,7 @@ const dummyPopularData = [
 
 export const Popular = (props) => {
   return (
-    <div className="py-8 w-full mx-auto">
+    <div className="py-4 w-full mx-auto">
       <div>
         <h2 className="text-2xl font-semibold">Popular Categories</h2>
 
