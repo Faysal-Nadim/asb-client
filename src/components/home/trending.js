@@ -38,29 +38,27 @@ export const Trending = (props) => {
       <div>
         <h2 className="text-2xl font-semibold">Explore What’s Trending</h2>
 
-        <div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-2">
-            {dummyTrendingData.map((item) => (
-              <div
-                key={item.id}
-                className="hover:bg-white border border-white hover:border-gray-100 rounded-lg hover:shadow-lg transition-shadow duration-300 p-2 cursor-pointer"
-              >
-                <div className="overflow-hidden rounded-lg">
-                  <img
-                    src={item.img}
-                    alt={item.title}
-                    className="w-full h-[380px] object-cover"
-                  />
-                </div>
-                <h3 className="text-lg text-center font-semibold mt-4">
-                  {item.title}
-                </h3>
-                <p className="text-sm text-center text-gray-600">
-                  {item.description}
-                </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-2">
+          {dummyTrendingData.map((item) => (
+            <div
+              key={item.id}
+              className="hover:bg-white border border-white hover:border-gray-100 rounded-xl hover:shadow-lg transition-shadow duration-300 p-2 cursor-pointer"
+            >
+              <div className="overflow-hidden rounded-lg">
+                <img
+                  src={item.img}
+                  alt={item.title}
+                  className="w-full h-[380px] object-cover"
+                />
               </div>
-            ))}
-          </div>
+              <h3 className="text-lg text-center font-semibold mt-4">
+                {item.title}
+              </h3>
+              <p className="text-sm text-center text-gray-600">
+                {item.description}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
     </div>

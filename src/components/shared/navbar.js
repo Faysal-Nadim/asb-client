@@ -3,12 +3,12 @@ import {
   cartIcon,
   searchIcon,
   shopIcon,
-  trippleBarIcon,
   userIcon,
   wishListIcon,
 } from "../../assets/SvgIcons";
 import { Link } from "react-router-dom";
 import { logo_black } from "../../assets";
+import MegaMenu from "./megamenu";
 
 const navIcons = [
   { icon: wishListIcon, link: "/wishlist", title: "Wishlist" },
@@ -31,10 +31,7 @@ export const Navbar = (props) => {
           <Link to={"/"}>
             <img src={logo_black} height={28} width={123} alt="Aleeha Logo" />
           </Link>
-          <div className="flex items-center gap-1 ml-6 hover:cursor-pointer hover:bg-gray-200 px-4 py-2 rounded-full ">
-            {trippleBarIcon}{" "}
-            <p className="text-[14px] font-semibold text-black">Categories</p>
-          </div>
+          <MegaMenu />
         </div>
 
         {/* Search Bar */}

@@ -1,6 +1,7 @@
 import React from "react";
 import { Hero } from "../components/home/hero";
 import { Trending } from "../components/home/trending";
+import { Popular } from "../components/home/popular";
 
 /**
  * @author
@@ -13,6 +14,8 @@ export const Home = (props) => {
       <Hero />
 
       <Trending />
+
+      <Popular />
     </div>
   );
 };
