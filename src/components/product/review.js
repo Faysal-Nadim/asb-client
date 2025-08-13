@@ -169,7 +169,14 @@ export default function ReviewsSection({
                   setSelectedCategory(selectedCategory === c.key ? null : c.key)
                 )}
               >
-                {c.label} <span className="ml-1 text-black">({c.count})</span>
+                {c.label}{" "}
+                <span
+                  className={`ml-1 text-black ${
+                    selectedCategory === c.key ? "text-white" : ""
+                  }`}
+                >
+                  ({c.count})
+                </span>
               </Chip>
             ))}
           </div>

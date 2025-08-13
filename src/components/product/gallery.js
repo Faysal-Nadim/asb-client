@@ -145,9 +145,11 @@ export default function ProductGallery({
               type="button"
               onClick={() => setIndex(i)}
               // ⬇️ IMPORTANT: stop shrinking + keep fixed size
-              className={`shrink-0 w-20 h-20 rounded-lg overflow-hidden border border-2
-                   border-transparent hover:border-black ${
-                     index === i ? "border-black" : ""
+              className={`shrink-0 w-20 h-20 rounded-lg overflow-hidden border
+                   hover:border-black hover:border-2 ${
+                     index === i
+                       ? "border-black border-2"
+                       : "border-transparent"
                    }`}
             >
               <img
