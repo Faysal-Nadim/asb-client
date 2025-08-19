@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "cra-template-pwa": "2.0.0",
+    "js-user-country": "^1.0.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^7.7.1",
