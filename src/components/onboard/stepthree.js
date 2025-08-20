@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { BasicSelectInput, BasicTextInput, DOBInput } from "../input/basictext";
+import ComplianceCheckbox from "../input/checkbox";
 
 /**
  * @author
@@ -92,65 +93,6 @@ export const StepThree = (props) => {
       {selected === "business" && (
         <BusinessInfoForm dob={dob} setDob={setDob} />
       )}
-
-      {/* <div className="w-full mx-auto border rounded-lg p-6 md:p-8 bg-white my-8">
-        <h2 className="text-lg font-semibold">Tell us a bit about yourself</h2>
-        <p className="text-gray-700 text-sm mt-4">
-          For compliance purposes, we may verify your identity with a secure
-          third-party service.
-          <br /> This information will never be displayed publicly on Aleeha.
-        </p>
-
-        <div className="mt-4 w-2/3">
-          <BasicSelectInput
-            label={"Country of residence"}
-            isRequired={true}
-            options={["Bangladesh", "India", "Pakistan", "Sri Lanka"]}
-          />
-
-          <div className="grid grid-cols-2 items-center gap-4">
-            <BasicTextInput
-              label={"First name"}
-              isRequired={true}
-              placeholder={"Enter your first name"}
-            />
-
-            <BasicTextInput
-              label={"Last name"}
-              isRequired={true}
-              placeholder={"Enter your last name"}
-            />
-          </div>
-
-          <div>
-            <DOBInput
-              value={dob}
-              onChange={setDob}
-              startYear={1950}
-              endYear={new Date().getFullYear()}
-              error={null}
-            />
-          </div>
-
-          <div className="mt-4">
-            <div className="mb-4">
-              <p className="font-semibold text-md">Address</p>
-              <p className="text-sm text-gray-600">
-                Address should match your identification documents.
-              </p>
-            </div>
-
-            <BasicTextInput label={"Street address"} isRequired={true} />
-
-            <div className="grid grid-cols-2 gap-4">
-              <BasicTextInput label={"City"} isRequired={true} />
-              <BasicTextInput label={"Postal code"} isRequired={true} />
-            </div>
-
-            <BasicTextInput label={"Phone number"} isRequired={true} />
-          </div>
-        </div>
-      </div> */}
 
       <div className="w-full mx-auto border rounded-lg p-6 md:p-8 bg-white my-8">
         <h2 className="text-lg font-semibold mb-6">
@@ -254,19 +196,65 @@ const ProprietorshipInfoForm = ({ dob, setDob }) => {
         Tell us a bit about your business
       </h2>
       <p className="text-gray-700 text-sm mt-4">
-        For compliance purposes, we may verify your identity with a secure
-        third-party service.
-        <br /> This information will never be displayed publicly on Aleeha.
+        For compliance purposes, we may verify your business information with a
+        secure third-party service.
+        <br /> Don’t worry, the information you enter here won’t be used
+        publicly.
       </p>
 
       <div className="mt-4 w-2/3">
+        <BasicTextInput
+          label={"Business name (As registered)"}
+          isRequired={true}
+        />
+
+        <div className="mt-4">
+          <div className="mb-4">
+            <p className="font-semibold text-md">Business address</p>
+            <p className="text-sm text-gray-600">
+              Address should match your Trade License.
+            </p>
+          </div>
+        </div>
+
         <BasicSelectInput
-          label={"Country of residence"}
+          label={"Country"}
           isRequired={true}
           options={["Bangladesh", "India", "Pakistan", "Sri Lanka"]}
         />
 
-        <div className="grid grid-cols-2 items-center gap-4">
+        <BasicTextInput label={"Street address"} isRequired={true} />
+
+        <div className="grid grid-cols-2 gap-4">
+          <BasicTextInput label={"City"} isRequired={true} />
+          <BasicTextInput label={"Postal code"} isRequired={true} />
+        </div>
+
+        <BasicTextInput label={"Phone number"} />
+
+        <BasicTextInput
+          label={"Business registration number"}
+          isRequired={true}
+        />
+
+        <ComplianceCheckbox onChange={(val) => console.log("checked:", val)} />
+      </div>
+
+      <div className="mt-6 w-2/3">
+        <div className="mb-4 border-t border-gray-300">
+          <p className="font-semibold text-md mt-6">
+            Who is the primary shop owner for the business?
+          </p>
+          <p className="text-sm text-gray-600 mt-4">
+            We may verify this information with a secure third-party service.
+            Rest assured, this info won’t ever be shared outside of this secure
+            service.
+          </p>
+        </div>
+
+        <p className="font-semibold text-lg">Shop owner’s name</p>
+
+        <div className="grid grid-cols-2 items-center gap-4 mt-4">
           <BasicTextInput
             label={"First name"}
             isRequired={true}
@@ -280,6 +268,16 @@ const ProprietorshipInfoForm = ({ dob, setDob }) => {
           />
         </div>
 
+        <p className="font-semibold text-lg mb-6 mt-4">
+          Shop owner’s home address
+        </p>
+
+        <BasicSelectInput
+          label={"Country of residence"}
+          isRequired={true}
+          options={["Bangladesh", "India", "Pakistan", "Sri Lanka"]}
+        />
+
         <div>
           <DOBInput
             value={dob}
@@ -287,6 +285,7 @@ const ProprietorshipInfoForm = ({ dob, setDob }) => {
             startYear={1950}
             endYear={new Date().getFullYear()}
             error={null}
+            label="Shop owner's date of birth"
           />
         </div>
 
@@ -319,19 +318,62 @@ const BusinessInfoForm = ({ dob, setDob }) => {
         Tell us a bit about your company
       </h2>
       <p className="text-gray-700 text-sm mt-4">
-        For compliance purposes, we may verify your identity with a secure
-        third-party service.
-        <br /> This information will never be displayed publicly on Aleeha.
+        For compliance purposes, we may verify your company information with a
+        secure third-party service.
+        <br /> Don’t worry, the information you enter here won’t be used
+        publicly.
       </p>
 
       <div className="mt-4 w-2/3">
+        <BasicTextInput label={"Legal entity name"} isRequired={true} />
+
+        <div className="mt-4">
+          <div className="mb-4">
+            <p className="font-semibold text-md">Company address</p>
+            <p className="text-sm text-gray-600">
+              Address should match your Trade License/Incorporation documents.
+            </p>
+          </div>
+        </div>
+
         <BasicSelectInput
-          label={"Country of residence"}
+          label={"Country"}
           isRequired={true}
           options={["Bangladesh", "India", "Pakistan", "Sri Lanka"]}
         />
 
-        <div className="grid grid-cols-2 items-center gap-4">
+        <BasicTextInput label={"Street address"} isRequired={true} />
+
+        <div className="grid grid-cols-2 gap-4">
+          <BasicTextInput label={"City"} isRequired={true} />
+          <BasicTextInput label={"Postal code"} isRequired={true} />
+        </div>
+
+        <BasicTextInput label={"Phone number"} />
+
+        <BasicTextInput
+          label={"Business registration number"}
+          isRequired={true}
+        />
+
+        <ComplianceCheckbox onChange={(val) => console.log("checked:", val)} />
+      </div>
+
+      <div className="mt-6 w-2/3">
+        <div className="mb-4 border-t border-gray-300">
+          <p className="font-semibold text-md mt-6">
+            Who is the primary shop owner for the business?
+          </p>
+          <p className="text-sm text-gray-600 mt-4">
+            We may verify this information with a secure third-party service.
+            Rest assured, this info won’t ever be shared outside of this secure
+            service.
+          </p>
+        </div>
+
+        <p className="font-semibold text-lg">Shop owner’s name</p>
+
+        <div className="grid grid-cols-2 items-center gap-4 mt-4">
           <BasicTextInput
             label={"First name"}
             isRequired={true}
@@ -345,6 +387,16 @@ const BusinessInfoForm = ({ dob, setDob }) => {
           />
         </div>
 
+        <p className="font-semibold text-lg mb-6 mt-4">
+          Shop owner’s home address
+        </p>
+
+        <BasicSelectInput
+          label={"Country of residence"}
+          isRequired={true}
+          options={["Bangladesh", "India", "Pakistan", "Sri Lanka"]}
+        />
+
         <div>
           <DOBInput
             value={dob}
@@ -352,6 +404,7 @@ const BusinessInfoForm = ({ dob, setDob }) => {
             startYear={1950}
             endYear={new Date().getFullYear()}
             error={null}
+            label="Shop owner's date of birth"
           />
         </div>
 

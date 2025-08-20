@@ -21,6 +21,7 @@ const BasicTextInput = ({
       <label htmlFor={name} className="text-black font-semibold text-md">
         {label}
         {isRequired && <span className="text-md text-red-500">*</span>}
+        {!isRequired && <span className="text-sm font-light"> (optional)</span>}
       </label>
       <input
         type={type || "text"}
