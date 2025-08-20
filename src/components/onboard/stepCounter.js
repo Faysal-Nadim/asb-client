@@ -6,6 +6,7 @@ const defaultSteps = [
   { label: "Shop preferences", status: "current" },
   { label: "Name your shop", status: "upcoming" },
   { label: "Billing and Payment", status: "upcoming" },
+  { label: "Verification", status: "upcoming" },
   { label: "Agreement", status: "upcoming" },
 ];
 
