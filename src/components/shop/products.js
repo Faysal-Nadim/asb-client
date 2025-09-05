@@ -1,4 +1,5 @@
 import React from "react";
+import { chatIcon, ReportIcon } from "../../assets/SvgIcons";
 
 /**
  * @author
@@ -99,8 +100,24 @@ const productData = {
   ],
 };
 
-export const Products = (props) => {
+export const Products = ({
+  price = 3.0,
+  priceSuffix = "+",
+  strikePrice = 10.73,
+  discountPct = 72,
+}) => {
   const [activeCategory, setActiveCategory] = React.useState("All");
+
+  function formatCurrency(n, c = "USD") {
+    try {
+      return new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: c,
+      }).format(n);
+    } catch {
+      return `USD ${Number(n).toFixed(2)}`;
+    }
+  }
   return (
     <div className="grid grid-cols-6 gap-4 mt-4">
       <div className="col-span-1">
@@ -116,20 +133,40 @@ export const Products = (props) => {
               {category} ({productData[category].length})
             </button>
           ))}
+        </div>
 
-          <div>
-            <div>Contact </div>
+        <div className="mt-8 space-y-4 p-2">
+          <div className="bg-[#2F5651] p-2 text-white flex items-center gap-2 justify-center rounded font-medium cursor-pointer hover:bg-[#244040]">
+            <p> {chatIcon}</p> Contact owner
+          </div>
+
+          <div className="p-2 border flex items-center gap-2 font-medium justify-center rounded  cursor-pointer hover:bg-gray-100">
+            <p>{ReportIcon}</p> Report Shop
           </div>
         </div>
       </div>
       <div className="col-span-5">
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-4">
           {productData[activeCategory].map((product) => (
-            <div key={product.id} className="border p-4 rounded-md">
+            <div
+              key={product.id}
+              className="border border-transparent hover:border-gray-300 p-2 rounded-md cursor-pointer"
+            >
               <img src={product.img} alt={product.name} className="mb-2" />
               <h3 className="font-bold">{product.name}</h3>
               <p className="text-gray-600">{product.category}</p>
-              <p className="text-lg font-bold">US${product.price}</p>
+              <div className="flex items-center gap-2">
+                <div className="text-lg font-bold text-[#2F5651]">
+                  {formatCurrency(price)}
+                  {priceSuffix}
+                </div>
+                <div className="text-gray-400 text-sm line-through">
+                  {formatCurrency(strikePrice)}
+                </div>
+                <span className="text-xs font-semibold text-white bg-green-600 px-2 py-1 rounded-full">
+                  {discountPct}% off
+                </span>
+              </div>
             </div>
           ))}
         </div>
