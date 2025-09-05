@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { BasicSelectInput, BasicTextInput, DOBInput } from "../input/basictext";
 import ComplianceCheckbox from "../input/checkbox";
+import { useNavigate } from "react-router-dom";
 
 /**
  * @author
@@ -26,10 +27,25 @@ const options = [
   },
 ];
 
-export const StepThree = (props) => {
+export const StepThree = ({ setSteps }) => {
+  const navigate = useNavigate();
+
   const [selected, setSelected] = useState("proprietorship");
 
   const [dob, setDob] = useState({ day: "", month: "", year: "" });
+
+  const handleSaveAndContinue = () => {
+    setSteps((prevSteps) =>
+      prevSteps.map((step, index) =>
+        index === 2
+          ? { ...step, status: "done" }
+          : index === 3
+          ? { ...step, status: "current" }
+          : step
+      )
+    );
+    navigate("/merchant/onboarding?step=3");
+  };
 
   return (
     <div className="p-8 max-w-[1080px] mx-auto">
@@ -120,6 +136,15 @@ export const StepThree = (props) => {
 
             <BasicTextInput label={"SWIFT/BIC code"} isRequired={true} />
           </div>
+        </div>
+      </div>
+
+      <div className="flex justify-end">
+        <div
+          onClick={handleSaveAndContinue}
+          className="rounded-full bg-black py-3 px-6 hover:shadow-lg hover:shadow-black/40 cursor-pointer"
+        >
+          <p className="text-md font-semibold text-white">Save & continue</p>
         </div>
       </div>
     </div>

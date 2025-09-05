@@ -4,6 +4,8 @@ import { StepOne } from "../components/onboard/stepone";
 import { useLocation } from "react-router-dom";
 import { StepTwo } from "../components/onboard/steptwo";
 import { StepThree } from "../components/onboard/stepthree";
+import { StepFour } from "../components/onboard/stepfour";
+import { StepFive } from "../components/onboard/stepfive";
 /**
  * @author
  * @function Onboarding
@@ -30,6 +32,10 @@ export const Onboarding = (props) => {
     }
   }, [search]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <div className="w-full bg-primary">
       <div className="p-8 max-w-[1380px] mx-auto">
@@ -47,6 +53,10 @@ export const Onboarding = (props) => {
       {currentStep === 1 && <StepTwo setSteps={setSteps} />}
 
       {currentStep === 2 && <StepThree setSteps={setSteps} />}
+
+      {currentStep === 3 && <StepFour setSteps={setSteps} />}
+
+      {currentStep === 4 && <StepFive setSteps={setSteps} />}
     </div>
   );
 };

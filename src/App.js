@@ -6,6 +6,8 @@ import { Home } from "./pages/home";
 import { GlobalLayout } from "./components/layout/global";
 import { Product } from "./pages/product";
 import { Onboarding } from "./pages/onboarding";
+import { Cart } from "./pages/cart";
+import { ShopDetails } from "./pages/shop";
 
 function App() {
   return (
@@ -34,6 +36,24 @@ function App() {
           element={
             <GlobalLayout>
               <Onboarding />
+            </GlobalLayout>
+          }
+        />
+
+        <Route
+          path="/cart"
+          element={
+            <GlobalLayout>
+              <Cart />
+            </GlobalLayout>
+          }
+        />
+
+        <Route
+          path="/shop/:permalink"
+          element={
+            <GlobalLayout>
+              <ShopDetails />
             </GlobalLayout>
           }
         />

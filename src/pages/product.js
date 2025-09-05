@@ -131,6 +131,7 @@ export const Product = (props) => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
   return (
     <div className="py-8 max-w-[1380px] mx-auto">
       <div className="lg:grid md:grid md:grid-cols-5 lg:grid-cols-5 gap-4">
