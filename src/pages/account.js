@@ -48,7 +48,7 @@ export const Account = (props) => {
             </div>
           </div>
 
-          <div className="flex justify-end">
+          <div className="flex justify-start mt-2">
             <div
               // onClick={handleSaveAndContinue}
               className="rounded-full bg-black py-2 px-4 hover:shadow-lg hover:shadow-black/40 cursor-pointer"
@@ -79,7 +79,7 @@ export const Account = (props) => {
             />
           </div>
 
-          <div className="flex justify-end">
+          <div className="flex justify-start">
             <div
               // onClick={handleSaveAndContinue}
               className="rounded-full bg-black py-2 px-4 hover:shadow-lg hover:shadow-black/40 cursor-pointer"
