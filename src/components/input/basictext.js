@@ -12,6 +12,7 @@ const BasicTextInput = ({
   isRequired,
   disabled,
   maxWidth,
+  isOptional,
 }) => {
   return (
     <div
@@ -21,7 +22,7 @@ const BasicTextInput = ({
       <label htmlFor={name} className="text-black font-semibold text-md">
         {label}
         {isRequired && <span className="text-md text-red-500">*</span>}
-        {!isRequired && <span className="text-sm font-light"> (optional)</span>}
+        {isOptional && <span className="text-sm font-light"> (optional)</span>}
       </label>
       <input
         type={type || "text"}
@@ -52,6 +53,7 @@ const BasicSelectInput = ({
   defaultDisabledValue,
   isRequired,
   tooltip,
+  disabled,
 }) => {
   return (
     <div className="flex flex-col space-y-1 mb-4">
@@ -68,6 +70,7 @@ const BasicSelectInput = ({
         value={value}
         onChange={onChange}
         aria-describedby="tooltip"
+        disabled={disabled}
       >
         {/* <option defaultValue={""} className="text-gray-200">
           {defaultDisabledValue ? defaultDisabledValue : "Select"}

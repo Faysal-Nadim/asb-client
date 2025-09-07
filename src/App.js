@@ -1,13 +1,16 @@
 import React from "react";
 import "./App.css";
 
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Outlet } from "react-router-dom";
 import { Home } from "./pages/home";
 import { GlobalLayout } from "./components/layout/global";
 import { Product } from "./pages/product";
 import { Onboarding } from "./pages/onboarding";
 import { Cart } from "./pages/cart";
 import { ShopDetails } from "./pages/shop";
+import { Account } from "./pages/account";
+import UserProfileLayout from "./components/layout/user";
+import { Order } from "./pages/order";
 
 function App() {
   return (
@@ -57,6 +60,19 @@ function App() {
             </GlobalLayout>
           }
         />
+
+        <Route
+          path="/user/*"
+          element={
+            <UserProfileLayout>
+              <Outlet />
+            </UserProfileLayout>
+          }
+        >
+          <Route index element={<Account />} />
+          <Route path={"account"} element={<Account />} />
+          <Route path={"orders"} element={<Order />} />
+        </Route>
       </Routes>
     </div>
   );

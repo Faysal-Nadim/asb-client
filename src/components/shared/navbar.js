@@ -9,11 +9,12 @@ import {
 import { Link } from "react-router-dom";
 import { logo_black } from "../../assets";
 import MegaMenu from "./megamenu";
+import MinimalDropdown from "./profiledropdown";
 
 const navIcons = [
   { icon: wishListIcon, link: "/wishlist", title: "Wishlist" },
   { icon: shopIcon, link: "/shop", title: "Shop Manager" },
-  { icon: userIcon, link: "/profile", title: "Your Account" },
+  { icon: userIcon, link: "", title: "Your Account" },
   { icon: cartIcon, link: "/cart", title: "Cart" },
 ];
 
@@ -50,16 +51,24 @@ export const Navbar = (props) => {
 
         {/* Navigation Icons */}
         <div className="flex items-center gap-2">
-          {navIcons.map((item, index) => (
-            <Link
-              key={index}
-              to={item.link}
-              title={item.title}
-              className="mx-2 hover:bg-gray-200 px-2 py-2 rounded-full"
-            >
-              {item.icon}
-            </Link>
-          ))}
+          {navIcons.map((item, index) => {
+            return (
+              <>
+                {item.link ? (
+                  <Link
+                    key={index}
+                    to={item.link}
+                    title={item.title}
+                    className="mx-2 hover:bg-gray-200 px-2 py-2 rounded-full"
+                  >
+                    {item.icon}
+                  </Link>
+                ) : (
+                  <MinimalDropdown />
+                )}
+              </>
+            );
+          })}
         </div>
       </div>
       {/* Bottom Border */}
