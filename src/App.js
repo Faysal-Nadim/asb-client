@@ -11,6 +11,13 @@ import { ShopDetails } from "./pages/shop";
 import { Account } from "./pages/account";
 import UserProfileLayout from "./components/layout/user";
 import { Order } from "./pages/order";
+import { ShopLayout } from "./components/layout/shop";
+import { Dashboard } from "./pages/my-shop/dashboard";
+import { Products } from "./pages/my-shop/products";
+import { Orders } from "./pages/my-shop/orders";
+import { Reports } from "./pages/my-shop/reports";
+import { Coupons } from "./pages/my-shop/coupons";
+import { Earnings } from "./pages/my-shop/earnings";
 
 function App() {
   return (
@@ -51,6 +58,23 @@ function App() {
             </GlobalLayout>
           }
         />
+
+        <Route
+          path="/my-shop/*"
+          element={
+            <ShopLayout>
+              <Outlet />
+            </ShopLayout>
+          }
+        >
+          <Route index element={<Dashboard />} />
+          <Route path={"dashboard"} element={<Dashboard />} />
+          <Route path={"products"} element={<Products />} />
+          <Route path={"orders"} element={<Orders />} />
+          <Route path={"reports"} element={<Reports />} />
+          <Route path={"coupons"} element={<Coupons />} />
+          <Route path={"earnings"} element={<Earnings />} />
+        </Route>
 
         <Route
           path="/shop/:permalink"

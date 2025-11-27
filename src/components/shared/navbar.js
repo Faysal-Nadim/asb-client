@@ -13,7 +13,7 @@ import MinimalDropdown from "./profiledropdown";
 
 const navIcons = [
   { icon: wishListIcon, link: "/wishlist", title: "Wishlist" },
-  { icon: shopIcon, link: "/shop", title: "Shop Manager" },
+  { icon: shopIcon, link: "/my-shop/dashboard", title: "Shop Manager" },
   { icon: userIcon, link: "", title: "Your Account" },
   { icon: cartIcon, link: "/cart", title: "Cart" },
 ];
