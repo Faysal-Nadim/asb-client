@@ -18,6 +18,7 @@ import { Orders } from "./pages/my-shop/orders";
 import { Reports } from "./pages/my-shop/reports";
 import { Coupons } from "./pages/my-shop/coupons";
 import { Earnings } from "./pages/my-shop/earnings";
+import { Wishlist } from "./pages/wishlist";
 
 function App() {
   return (
@@ -55,6 +56,15 @@ function App() {
           element={
             <GlobalLayout>
               <Cart />
+            </GlobalLayout>
+          }
+        />
+
+        <Route
+          path="/wishlist"
+          element={
+            <GlobalLayout>
+              <Wishlist />
             </GlobalLayout>
           }
         />

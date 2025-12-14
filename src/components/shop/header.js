@@ -28,7 +28,9 @@ export const ShopHeader = (props) => {
             />
             <div>
               <h2 className="text-2xl font-bold">LamariiJewelry</h2>
-              <p className="text-gray-600 text-sm">Poltava, Ukraine</p>
+              <p className="text-gray-600 text-sm">
+                Artisan from Poltava, Ukraine
+              </p>
 
               <div className="flex items-center gap-4 mt-2 text-xl">
                 <div className="flex items-center gap-1">

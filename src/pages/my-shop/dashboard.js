@@ -86,7 +86,7 @@ const demoOrders = [
 
 export const Dashboard = () => {
   return (
-    <div className="max-w-[1380px] mx-auto lg:py-4 space-y-4">
+    <div className="max-w-[1380px] mx-auto py-4 space-y-4">
       {/* Top stats cards */}
 
       <StatsSection stats={stats} />
