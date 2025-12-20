@@ -6,5 +6,5 @@ import React from "react";
  **/
 
 export const Order = (props) => {
-  return <div className="max-w-[1380px] mx-auto py-8">Order</div>;
+  return <div className="max-w-[1024px] mx-auto py-8">Order</div>;
 };

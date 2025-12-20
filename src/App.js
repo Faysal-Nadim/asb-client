@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./App.css";
 
 import { Routes, Route, Outlet } from "react-router-dom";
@@ -8,9 +8,8 @@ import { Product } from "./pages/product";
 import { Onboarding } from "./pages/onboarding";
 import { Cart } from "./pages/cart";
 import { ShopDetails } from "./pages/shop";
-import { Account } from "./pages/account";
-import UserProfileLayout from "./components/layout/user";
-import { Order } from "./pages/order";
+import { Account } from "./pages/user/account";
+import { Order } from "./pages/user/order";
 import { ShopLayout } from "./components/layout/shop";
 import { Dashboard } from "./pages/my-shop/dashboard";
 import { Products } from "./pages/my-shop/products";
@@ -19,8 +18,21 @@ import { Reports } from "./pages/my-shop/reports";
 import { Coupons } from "./pages/my-shop/coupons";
 import { Earnings } from "./pages/my-shop/earnings";
 import { Wishlist } from "./pages/wishlist";
+import { Toaster } from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import { isUserLoggedIn } from "./redux/actions";
+import PrivateRoute from "./components/hoc/private";
 
 function App() {
+  const auth = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!auth.authenticate) {
+      dispatch(isUserLoggedIn());
+    }
+  }, [auth.authenticate, dispatch]);
+
   return (
     <div className="App">
       <Routes>
@@ -96,18 +108,25 @@ function App() {
         />
 
         <Route
-          path="/user/*"
+          path="/user/account"
           element={
-            <UserProfileLayout>
-              <Outlet />
-            </UserProfileLayout>
+            <GlobalLayout>
+              <PrivateRoute>
+                <Account />
+              </PrivateRoute>
+            </GlobalLayout>
           }
-        >
-          <Route index element={<Account />} />
-          <Route path={"account"} element={<Account />} />
-          <Route path={"orders"} element={<Order />} />
-        </Route>
+        />
+        <Route
+          path="/user/orders"
+          element={
+            <GlobalLayout>
+              <Order />
+            </GlobalLayout>
+          }
+        />
       </Routes>
+      <Toaster position="top-center" reverseOrder={false} />
     </div>
   );
 }

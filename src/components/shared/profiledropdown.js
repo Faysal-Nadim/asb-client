@@ -2,25 +2,28 @@ import React, { useEffect, useRef, useState } from "react";
 import {
   logOutIconSmall,
   messageIconSmall,
+  orderIconSmall,
   settingsIconSmall,
   userIcon,
   userIconSmall,
 } from "../../assets/SvgIcons";
 import { Link } from "react-router-dom";
-import { AuthModal } from "../auth/authmodal";
+import { AuthModal } from "../modal/authmodal";
+import { useDispatch, useSelector } from "react-redux";
+import { userSignOut } from "../../redux/actions";
+import { CDN } from "../../redux/helpers/urlConfig";
 // removed lucide-react to keep it plain JS (no extra deps)
 
 const profileLinks = [
   { icon: userIconSmall, label: "My Account", link: "/user/account" },
+  { icon: orderIconSmall, label: "Orders", link: "/user/orders" },
   { icon: messageIconSmall, label: "Messages", link: "/user/messages" },
   { icon: settingsIconSmall, label: "Settings", link: "/user/settings" },
 ];
 
-export default function MinimalDropdown({
-  avatarUrl = "https://i.pravatar.cc/100?img=12",
-  userName = "Ali Store BD",
-  children,
-}) {
+export default function MinimalDropdown({ children }) {
+  const dispatch = useDispatch();
+
   const [open, setOpen] = useState(false);
   const btnRef = useRef(null);
   const menuRef = useRef(null);
@@ -60,14 +63,18 @@ export default function MinimalDropdown({
     });
   }
 
-  const auth = false;
+  const auth = useSelector((state) => state.auth);
+
+  const handleSignOut = () => {
+    dispatch(userSignOut());
+  };
 
   const [authOpen, setAuthOpen] = useState(false);
   const [authTab, setAuthTab] = useState("login"); // "login" | "signup"
 
   return (
     <div className="relative inline-block text-left">
-      {!auth ? (
+      {!auth.authenticate ? (
         <div
           onClick={() => {
             setAuthTab("login");
@@ -88,7 +95,11 @@ export default function MinimalDropdown({
             className="flex items-center gap-1 rounded-full px-1 py-1 hover:bg-gray-200"
           >
             <img
-              src={avatarUrl}
+              src={
+                auth?.user?.img
+                  ? `${CDN}${auth?.user?.img?.path}`
+                  : "https://placehold.co/200x200"
+              }
               alt="User avatar"
               className="h-7 w-7 rounded-full object-cover"
             />
@@ -138,7 +149,12 @@ export default function MinimalDropdown({
                     </Link>
                   ))}
 
-                  <li onClick={toggle}>
+                  <li
+                    onClick={() => {
+                      handleSignOut();
+                      toggle();
+                    }}
+                  >
                     <button
                       role="menuitem"
                       className="w-full rounded-lg px-3 py-2 font-medium text-md text-left hover:bg-gray-100 flex items-center gap-2"

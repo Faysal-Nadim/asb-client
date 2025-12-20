@@ -1,7 +1,16 @@
 // components/common/AuthModal.jsx
 import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  userLoginWithEmail,
+  userRegistrationWithEmail,
+} from "../../redux/actions";
 
 export const AuthModal = ({ isOpen, onClose, defaultTab = "login" }) => {
+  const dispatch = useDispatch();
+
+  const auth = useSelector((state) => state.auth);
+
   const [tab, setTab] = useState(defaultTab);
 
   useEffect(() => {
@@ -19,6 +28,11 @@ export const AuthModal = ({ isOpen, onClose, defaultTab = "login" }) => {
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
+
+  if (auth.authenticate) {
+    onClose();
+    return null;
+  }
 
   const isLogin = tab === "login";
 
@@ -64,7 +78,11 @@ export const AuthModal = ({ isOpen, onClose, defaultTab = "login" }) => {
 
           {/* Content */}
           <div className="p-5 sm:p-6">
-            {isLogin ? <LoginForm /> : <SignupForm />}
+            {isLogin ? (
+              <LoginForm dispatch={dispatch} />
+            ) : (
+              <SignupForm dispatch={dispatch} />
+            )}
           </div>
         </div>
       </div>
@@ -72,12 +90,14 @@ export const AuthModal = ({ isOpen, onClose, defaultTab = "login" }) => {
   );
 };
 
-const LoginForm = () => {
+const LoginForm = ({ dispatch }) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    // TODO: call your login API here
+    dispatch(userLoginWithEmail({ email, password }));
   };
-
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
@@ -99,6 +119,8 @@ const LoginForm = () => {
             required
             className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#2F5651] focus:border-[#2F5651]"
             placeholder="you@example.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </div>
 
@@ -111,6 +133,8 @@ const LoginForm = () => {
             required
             className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#2F5651] focus:border-[#2F5651]"
             placeholder="••••••••"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
         </div>
 
@@ -155,10 +179,24 @@ const LoginForm = () => {
   );
 };
 
-const SignupForm = () => {
+const SignupForm = ({ dispatch }) => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+    } else {
+      setError(null);
+    }
+  }, [password, confirmPassword]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    // TODO: call your signup API here
+    dispatch(userRegistrationWithEmail({ name, email, password }));
   };
 
   return (
@@ -182,6 +220,8 @@ const SignupForm = () => {
             required
             className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#2F5651] focus:border-[#2F5651]"
             placeholder="John Doe"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
           />
         </div>
 
@@ -194,6 +234,8 @@ const SignupForm = () => {
             required
             className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#2F5651] focus:border-[#2F5651]"
             placeholder="you@example.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </div>
 
@@ -207,6 +249,8 @@ const SignupForm = () => {
               required
               className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#2F5651] focus:border-[#2F5651]"
               placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
           <div>
@@ -218,7 +262,12 @@ const SignupForm = () => {
               required
               className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#2F5651] focus:border-[#2F5651]"
               placeholder="••••••••"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
             />
+            {error && (
+              <div className="text-[11px] text-red-500 mt-1">{error}</div>
+            )}
           </div>
         </div>
 

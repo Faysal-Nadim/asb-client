@@ -37,13 +37,13 @@ export const Navbar = (props) => {
 
         {/* Search Bar */}
         <div className="flex items-center w-1/2">
-          <div class="flex items-center border border-2 border-[#222222] rounded-full w-full overflow-hidden">
+          <div className="flex items-center border border-2 border-[#222222] rounded-full w-full overflow-hidden">
             <input
               type="text"
               placeholder="Search for anything"
-              class="flex-grow px-4 py-3 text-gray-700 placeholder-gray-400 focus:outline-none"
+              className="flex-grow px-4 py-3 text-gray-700 placeholder-gray-400 focus:outline-none"
             />
-            <button class="bg-[#2F5651] transform transition-transform duration-200 hover:scale-110 p-2 rounded-full mr-1">
+            <button className="bg-[#2F5651] transform transition-transform duration-200 hover:scale-110 p-2 rounded-full mr-1">
               {searchIcon}
             </button>
           </div>
@@ -53,7 +53,7 @@ export const Navbar = (props) => {
         <div className="flex items-center gap-2">
           {navIcons.map((item, index) => {
             return (
-              <>
+              <React.Fragment key={index}>
                 {item.link ? (
                   <Link
                     key={index}
@@ -66,7 +66,7 @@ export const Navbar = (props) => {
                 ) : (
                   <MinimalDropdown />
                 )}
-              </>
+              </React.Fragment>
             );
           })}
         </div>

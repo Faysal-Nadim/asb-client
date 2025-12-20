@@ -13,6 +13,7 @@ const BasicTextInput = ({
   disabled,
   maxWidth,
   isOptional,
+  errorText,
 }) => {
   return (
     <div
@@ -40,6 +41,8 @@ const BasicTextInput = ({
           {tooltip}
         </p>
       )}
+
+      {errorText && <p className="text-sm text-rose-600">{errorText}</p>}
     </div>
   );
 };
