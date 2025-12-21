@@ -22,6 +22,8 @@ import { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { isUserLoggedIn } from "./redux/actions";
 import PrivateRoute from "./components/hoc/private";
+import { OnboardStatus } from "./pages/status/onboard";
+import { SystemLayout } from "./components/layout/system";
 
 function App() {
   const auth = useSelector((state) => state.auth);
@@ -60,6 +62,15 @@ function App() {
             <GlobalLayout>
               <Onboarding />
             </GlobalLayout>
+          }
+        />
+
+        <Route
+          path="/merchant/onboarding/status"
+          element={
+            <SystemLayout type={"Merchant Onboarding"}>
+              <OnboardStatus />
+            </SystemLayout>
           }
         />
 

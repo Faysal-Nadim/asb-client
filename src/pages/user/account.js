@@ -33,6 +33,7 @@ export const Account = (props) => {
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [passwordError, setPasswordError] = useState(null);
 
+  // Validate new password and confirm password match
   useEffect(() => {
     if (newPassword !== confirmNewPassword) {
       setPasswordError("New passwords do not match.");
@@ -41,6 +42,7 @@ export const Account = (props) => {
     }
   }, [newPassword, confirmNewPassword]);
 
+  // Parse and set DOB on component mount
   useEffect(() => {
     const parseDOB = (dobString) => {
       if (!dobString) return { day: "", month: "", year: "" };
@@ -59,6 +61,7 @@ export const Account = (props) => {
     window.scrollTo(0, 0);
   }, []);
 
+  //Check if any profile field has changed
   useEffect(() => {
     if (
       name === user?.name &&
@@ -76,6 +79,7 @@ export const Account = (props) => {
     }
   }, [name, gender, country, bio, dob, user]);
 
+  // Handle profile update submission
   const handleProfileUpdate = (e) => {
     e.preventDefault();
     const data = {
@@ -91,6 +95,7 @@ export const Account = (props) => {
     dispatch(updateUserProfile(data));
   };
 
+  // Handle password change submission
   const handlePasswordChange = (e) => {
     e.preventDefault();
     if (passwordError) return;

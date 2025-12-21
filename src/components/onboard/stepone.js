@@ -6,7 +6,15 @@ import { useNavigate } from "react-router-dom";
  * @function StepOne
  **/
 
-export const StepOne = ({ setSteps }) => {
+export const StepOne = ({
+  setSteps,
+  shopLang,
+  setShopLang,
+  shopCountry,
+  setShopCountry,
+  shopCurr,
+  setShopCurr,
+}) => {
   const navigate = useNavigate();
 
   const handleSaveAndContinue = () => {
@@ -31,38 +39,40 @@ export const StepOne = ({ setSteps }) => {
         </p>
       </div>
 
-      <div class="w-full mx-auto border rounded-lg p-6 md:p-8 bg-white my-8">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div class="space-y-6">
-            <div class="grid grid-cols-[160px_1fr] items-center gap-3">
+      <div className="w-full mx-auto border rounded-lg p-6 md:p-8 bg-white my-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-6">
+            <div className="grid grid-cols-[160px_1fr] items-center gap-3">
               <label
-                for="shopLanguage"
-                class="text-sm font-medium text-gray-700"
+                htmlFor="shopLanguage"
+                className="text-sm font-medium text-gray-700"
               >
-                Shop language <span class="text-red-500">*</span>
+                Shop language <span className="text-red-500">*</span>
               </label>
               <div>
                 <select
                   id="shopLanguage"
                   name="shopLanguage"
-                  class="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm
+                  className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm
                          focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                   disabled
+                  value={shopLang}
+                  onChange={(e) => setShopLang(e.target.value)}
                 >
-                  <option>English</option>
-                  {/* <option>বাংলা (Bangla)</option>
-                  <option>Français</option>
-                  <option>Deutsch</option> */}
+                  <option value={"en"}>English</option>
+                  {/* <option value={"bn"}>বাংলা (Bangla)</option>
+                  <option value={"fr"}>Français</option>
+                  <option value={"de"}>Deutsch</option> */}
                 </select>
               </div>
             </div>
 
-            <div class="grid grid-cols-[160px_1fr] items-center gap-3">
+            <div className="grid grid-cols-[160px_1fr] items-center gap-3">
               <label
-                for="shopCountry"
-                class="text-sm font-medium text-gray-700"
+                htmlFor="shopCountry"
+                className="text-sm font-medium text-gray-700"
               >
-                Shop country <span class="text-red-500">*</span>
+                Shop country <span className="text-red-500">*</span>
               </label>
               <div>
                 <select
@@ -70,8 +80,10 @@ export const StepOne = ({ setSteps }) => {
                   name="shopCountry"
                   className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm
                          focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                  value={shopCountry}
+                  onChange={(e) => setShopCountry(e.target.value)}
                 >
-                  <option>Bangladesh</option>
+                  <option value={"BD"}>Bangladesh</option>
                   <option disabled>India</option>
                   <option disabled>Bhutan</option>
                   <option disabled>Myanmar</option>
@@ -82,9 +94,9 @@ export const StepOne = ({ setSteps }) => {
               </div>
             </div>
 
-            <div class="grid grid-cols-[160px_1fr] items-center gap-3">
+            <div className="grid grid-cols-[160px_1fr] items-center gap-3">
               <label
-                for="shopCurrency"
+                htmlFor="shopCurrency"
                 className="text-sm font-medium text-gray-700"
               >
                 Shop currency <span className="text-red-500">*</span>
@@ -95,11 +107,13 @@ export const StepOne = ({ setSteps }) => {
                   name="shopCurrency"
                   className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm
                          focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                  value={shopCurr}
+                  onChange={(e) => setShopCurr(e.target.value)}
                 >
-                  <option>৳ Bangladeshi Taka</option>
-                  <option>£ British Pound</option>
-                  <option>$ US Dollar</option>
-                  <option>€ Euro</option>
+                  <option value={"BDT"}>৳ Bangladeshi Taka</option>
+                  <option value={"GBP"}>£ British Pound</option>
+                  <option value={"USD"}>$ US Dollar</option>
+                  <option value={"EUR"}>€ Euro</option>
                 </select>
               </div>
             </div>
@@ -120,29 +134,6 @@ export const StepOne = ({ setSteps }) => {
             </p>
           </div>
         </div>
-
-        {/* <div class="w-full max-w-md mx-auto mt-10">
-          <label for="shopName" class="block text-gray-700 font-medium mb-2">
-            Shop Name
-          </label>
-          <input
-            type="text"
-            id="shopName"
-            name="shopName"
-            class="w-full px-4 py-2 border border-[#767676] rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-            placeholder="Enter shop name"
-            minlength="4"
-            maxlength="20"
-            pattern="^[a-zA-Z0-9]+$"
-            required
-          />
-          <div class="mt-2 text-sm text-gray-600">
-            <p class="flex items-center gap-2">Between 4–20 characters</p>
-            <p class="flex items-center gap-2">
-              No special characters, spaces, or accented letters
-            </p>
-          </div>
-        </div> */}
       </div>
 
       <div className="flex justify-end">

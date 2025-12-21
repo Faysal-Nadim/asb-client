@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BasicSelectInput, BasicTextInput, DOBInput } from "../input/basictext";
 import ComplianceCheckbox from "../input/checkbox";
 import { useNavigate } from "react-router-dom";
@@ -10,29 +10,45 @@ import { useNavigate } from "react-router-dom";
 
 const options = [
   {
-    id: "individual",
+    id: "INDIVIDUAL",
     title: "Individual",
     description: "An individual without a business license.",
   },
   {
-    id: "proprietorship",
+    id: "SOLE_PROPRIETOR",
     title: "Sole proprietorship",
     description:
       "Most sellers on Aleeha fall into this category.\n(A sole trader with a business license.)",
   },
   {
-    id: "business",
+    id: "LEGAL_ENTITY",
     title: "Incorporated business",
     description: "A registered legal entity",
   },
 ];
 
-export const StepThree = ({ setSteps }) => {
+export const StepThree = ({
+  setSteps,
+  ownerFormData,
+  setOwnerField,
+  legalFormData,
+  setLegalField,
+  paymentFormData,
+  setPaymentField,
+  shopType,
+  setShopType,
+}) => {
   const navigate = useNavigate();
 
-  const [selected, setSelected] = useState("proprietorship");
-
   const [dob, setDob] = useState({ day: "", month: "", year: "" });
+
+  useEffect(() => {
+    const handleDobChange = () => {
+      const dobString = new Date(`${dob.year}-${dob.month}-${dob.day}`);
+      setOwnerField("dob", dobString);
+    };
+    handleDobChange();
+  }, [dob, setOwnerField]);
 
   const handleSaveAndContinue = () => {
     setSteps((prevSteps) =>
@@ -71,19 +87,19 @@ export const StepThree = ({ setSteps }) => {
           {options.map((option) => (
             <div
               key={option.id}
-              onClick={() => setSelected(option.id)}
+              onClick={() => setShopType(option.id)}
               className={`cursor-pointer border rounded-lg p-4 transition flex items-start gap-3 ${
-                selected === option.id
+                shopType === option.id
                   ? "border-black ring-1 ring-black"
                   : "border-gray-300"
               }`}
             >
               <div
                 className={`w-5 h-5 rounded-full border flex items-center justify-center mt-1 ${
-                  selected === option.id ? "border-black" : "border-gray-400"
+                  shopType === option.id ? "border-black" : "border-gray-400"
                 }`}
               >
-                {selected === option.id && (
+                {shopType === option.id && (
                   <div className="w-2.5 h-2.5 rounded-full bg-black" />
                 )}
               </div>
@@ -98,16 +114,35 @@ export const StepThree = ({ setSteps }) => {
         </div>
       </div>
 
-      {selected === "individual" && (
-        <IndividualInfoForm dob={dob} setDob={setDob} />
+      {shopType === "INDIVIDUAL" && (
+        <IndividualInfoForm
+          dob={dob}
+          setDob={setDob}
+          ownerFormData={ownerFormData}
+          setOwnerField={setOwnerField}
+        />
       )}
 
-      {selected === "proprietorship" && (
-        <ProprietorshipInfoForm dob={dob} setDob={setDob} />
+      {shopType === "SOLE_PROPRIETOR" && (
+        <ProprietorshipInfoForm
+          dob={dob}
+          setDob={setDob}
+          ownerFormData={ownerFormData}
+          setOwnerField={setOwnerField}
+          legalFormData={legalFormData}
+          setLegalField={setLegalField}
+        />
       )}
 
-      {selected === "business" && (
-        <BusinessInfoForm dob={dob} setDob={setDob} />
+      {shopType === "LEGAL_ENTITY" && (
+        <BusinessInfoForm
+          dob={dob}
+          setDob={setDob}
+          ownerFormData={ownerFormData}
+          setOwnerField={setOwnerField}
+          legalFormData={legalFormData}
+          setLegalField={setLegalField}
+        />
       )}
 
       <div className="w-full mx-auto border rounded-lg p-6 md:p-8 bg-white my-8">
@@ -115,26 +150,47 @@ export const StepThree = ({ setSteps }) => {
           Add your bank information
         </h2>
 
-        <div className="flex flex-col gap-2">
-          <p className="font-medium">Name of the account holder</p>
-          <p>Faysal Jamil Nadim</p>
-          <p className="text-gray-600 text-sm">
-            Make sure the name on your bank account matches the name you entered
-            above.
-          </p>
-        </div>
-
         <div className="w-2/3 mt-6">
-          <BasicTextInput label={"Bank name"} isRequired={true} />
+          <BasicTextInput
+            label={"Account name"}
+            isRequired={true}
+            value={paymentFormData.accountHolder}
+            onChange={(e) => setPaymentField("accountHolder", e.target.value)}
+          />
+          <BasicTextInput
+            label={"Bank name"}
+            isRequired={true}
+            value={paymentFormData.bankName}
+            onChange={(e) => setPaymentField("bankName", e.target.value)}
+          />
 
-          <BasicTextInput label={"Account number"} isRequired={true} />
+          <BasicTextInput
+            label={"Account number"}
+            isRequired={true}
+            value={paymentFormData.accountNumber}
+            onChange={(e) => setPaymentField("accountNumber", e.target.value)}
+          />
 
-          <BasicTextInput label={"Branch"} isRequired={true} />
-
+          <BasicTextInput
+            label={"Branch"}
+            isRequired={true}
+            value={paymentFormData.branch}
+            onChange={(e) => setPaymentField("branch", e.target.value)}
+          />
           <div className="grid grid-cols-2 gap-4">
-            <BasicTextInput label={"Routing number"} isRequired={true} />
+            <BasicTextInput
+              label={"Routing number"}
+              isRequired={true}
+              value={paymentFormData.routingNumber}
+              onChange={(e) => setPaymentField("routingNumber", e.target.value)}
+            />
 
-            <BasicTextInput label={"SWIFT/BIC code"} isRequired={true} />
+            <BasicTextInput
+              label={"SWIFT/BIC code"}
+              isRequired={true}
+              value={paymentFormData.swiftCode}
+              onChange={(e) => setPaymentField("swiftCode", e.target.value)}
+            />
           </div>
         </div>
       </div>
@@ -151,7 +207,7 @@ export const StepThree = ({ setSteps }) => {
   );
 };
 
-const IndividualInfoForm = ({ dob, setDob }) => {
+const IndividualInfoForm = ({ dob, setDob, ownerFormData, setOwnerField }) => {
   return (
     <div className="w-full mx-auto border rounded-lg p-6 md:p-8 bg-white my-8">
       <h2 className="text-lg font-semibold">Tell us a bit about yourself</h2>
@@ -165,7 +221,15 @@ const IndividualInfoForm = ({ dob, setDob }) => {
         <BasicSelectInput
           label={"Country of residence"}
           isRequired={true}
-          options={["Bangladesh", "India", "Pakistan", "Sri Lanka"]}
+          options={[
+            "Select Country",
+            "Bangladesh",
+            "India",
+            "Pakistan",
+            "Sri Lanka",
+          ]}
+          value={ownerFormData.country}
+          onChange={(e) => setOwnerField("country", e.target.value)}
         />
 
         <div className="grid grid-cols-2 items-center gap-4">
@@ -173,12 +237,16 @@ const IndividualInfoForm = ({ dob, setDob }) => {
             label={"First name"}
             isRequired={true}
             placeholder={"Enter your first name"}
+            value={ownerFormData.firstName}
+            onChange={(e) => setOwnerField("firstName", e.target.value)}
           />
 
           <BasicTextInput
             label={"Last name"}
             isRequired={true}
             placeholder={"Enter your last name"}
+            value={ownerFormData.lastName}
+            onChange={(e) => setOwnerField("lastName", e.target.value)}
           />
         </div>
 
@@ -200,21 +268,48 @@ const IndividualInfoForm = ({ dob, setDob }) => {
             </p>
           </div>
 
-          <BasicTextInput label={"Street address"} isRequired={true} />
+          <BasicTextInput
+            label={"Street address"}
+            isRequired={true}
+            value={ownerFormData.street}
+            onChange={(e) => setOwnerField("street", e.target.value)}
+          />
 
           <div className="grid grid-cols-2 gap-4">
-            <BasicTextInput label={"City"} isRequired={true} />
-            <BasicTextInput label={"Postal code"} isRequired={true} />
+            <BasicTextInput
+              label={"City"}
+              isRequired={true}
+              value={ownerFormData.city}
+              onChange={(e) => setOwnerField("city", e.target.value)}
+            />
+            <BasicTextInput
+              label={"Postal code"}
+              isRequired={true}
+              value={ownerFormData.zip}
+              onChange={(e) => setOwnerField("zip", e.target.value)}
+            />
           </div>
 
-          <BasicTextInput label={"Phone number"} isRequired={true} />
+          <BasicTextInput
+            label={"Phone number"}
+            isRequired={true}
+            value={ownerFormData.phone}
+            onChange={(e) => setOwnerField("phone", e.target.value)}
+          />
         </div>
       </div>
     </div>
   );
 };
 
-const ProprietorshipInfoForm = ({ dob, setDob }) => {
+const ProprietorshipInfoForm = ({
+  dob,
+  setDob,
+  ownerFormData,
+  setOwnerField,
+  legalFormData,
+  setLegalField,
+}) => {
   return (
     <div className="w-full mx-auto border rounded-lg p-6 md:p-8 bg-white my-8">
       <h2 className="text-lg font-semibold">
@@ -231,6 +326,8 @@ const ProprietorshipInfoForm = ({ dob, setDob }) => {
         <BasicTextInput
           label={"Business name (As registered)"}
           isRequired={true}
+          value={legalFormData.legalName}
+          onChange={(e) => setLegalField("legalName", e.target.value)}
         />
 
         <div className="mt-4">
@@ -245,24 +342,56 @@ const ProprietorshipInfoForm = ({ dob, setDob }) => {
         <BasicSelectInput
           label={"Country"}
           isRequired={true}
-          options={["Bangladesh", "India", "Pakistan", "Sri Lanka"]}
+          options={[
+            "Select Country",
+            "Bangladesh",
+            "India",
+            "Pakistan",
+            "Sri Lanka",
+          ]}
+          value={legalFormData.country}
+          onChange={(e) => setLegalField("country", e.target.value)}
         />
 
-        <BasicTextInput label={"Street address"} isRequired={true} />
+        <BasicTextInput
+          label={"Street address"}
+          isRequired={true}
+          value={legalFormData.street}
+          onChange={(e) => setLegalField("street", e.target.value)}
+        />
 
         <div className="grid grid-cols-2 gap-4">
-          <BasicTextInput label={"City"} isRequired={true} />
-          <BasicTextInput label={"Postal code"} isRequired={true} />
+          <BasicTextInput
+            label={"City"}
+            isRequired={true}
+            value={legalFormData.city}
+            onChange={(e) => setLegalField("city", e.target.value)}
+          />
+          <BasicTextInput
+            label={"Postal code"}
+            isRequired={true}
+            value={legalFormData.zip}
+            onChange={(e) => setLegalField("zip", e.target.value)}
+          />
         </div>
 
-        <BasicTextInput label={"Phone number"} />
+        <BasicTextInput
+          label={"Phone number"}
+          value={legalFormData.phone}
+          onChange={(e) => setLegalField("phone", e.target.value)}
+        />
 
         <BasicTextInput
           label={"Business registration number"}
           isRequired={true}
+          value={legalFormData.registrationNo}
+          onChange={(e) => setLegalField("registrationNo", e.target.value)}
         />
 
-        <ComplianceCheckbox onChange={(val) => console.log("checked:", val)} />
+        <ComplianceCheckbox
+          checked={legalFormData.consented}
+          onChange={(val) => setLegalField("consented", val)}
+        />
       </div>
 
       <div className="mt-6 w-2/3">
@@ -284,12 +413,16 @@ const ProprietorshipInfoForm = ({ dob, setDob }) => {
             label={"First name"}
             isRequired={true}
             placeholder={"Enter your first name"}
+            value={ownerFormData.firstName}
+            onChange={(e) => setOwnerField("firstName", e.target.value)}
           />
 
           <BasicTextInput
             label={"Last name"}
             isRequired={true}
             placeholder={"Enter your last name"}
+            value={ownerFormData.lastName}
+            onChange={(e) => setOwnerField("lastName", e.target.value)}
           />
         </div>
 
@@ -300,7 +433,15 @@ const ProprietorshipInfoForm = ({ dob, setDob }) => {
         <BasicSelectInput
           label={"Country of residence"}
           isRequired={true}
-          options={["Bangladesh", "India", "Pakistan", "Sri Lanka"]}
+          options={[
+            "Select Country",
+            "Bangladesh",
+            "India",
+            "Pakistan",
+            "Sri Lanka",
+          ]}
+          value={ownerFormData.country}
+          onChange={(e) => setOwnerField("country", e.target.value)}
         />
 
         <div>
@@ -322,21 +463,48 @@ const ProprietorshipInfoForm = ({ dob, setDob }) => {
             </p>
           </div>
 
-          <BasicTextInput label={"Street address"} isRequired={true} />
+          <BasicTextInput
+            label={"Street address"}
+            isRequired={true}
+            value={ownerFormData.street}
+            onChange={(e) => setOwnerField("street", e.target.value)}
+          />
 
           <div className="grid grid-cols-2 gap-4">
-            <BasicTextInput label={"City"} isRequired={true} />
-            <BasicTextInput label={"Postal code"} isRequired={true} />
+            <BasicTextInput
+              label={"City"}
+              isRequired={true}
+              value={ownerFormData.city}
+              onChange={(e) => setOwnerField("city", e.target.value)}
+            />
+            <BasicTextInput
+              label={"Postal code"}
+              isRequired={true}
+              value={ownerFormData.zip}
+              onChange={(e) => setOwnerField("zip", e.target.value)}
+            />
           </div>
 
-          <BasicTextInput label={"Phone number"} isRequired={true} />
+          <BasicTextInput
+            label={"Phone number"}
+            isRequired={true}
+            value={ownerFormData.phone}
+            onChange={(e) => setOwnerField("phone", e.target.value)}
+          />
         </div>
       </div>
     </div>
   );
 };
 
-const BusinessInfoForm = ({ dob, setDob }) => {
+const BusinessInfoForm = ({
+  dob,
+  setDob,
+  legalFormData,
+  setLegalField,
+  ownerFormData,
+  setOwnerField,
+}) => {
   return (
     <div className="w-full mx-auto border rounded-lg p-6 md:p-8 bg-white my-8">
       <h2 className="text-lg font-semibold">
@@ -350,7 +518,12 @@ const BusinessInfoForm = ({ dob, setDob }) => {
       </p>
 
       <div className="mt-4 w-2/3">
-        <BasicTextInput label={"Legal entity name"} isRequired={true} />
+        <BasicTextInput
+          label={"Legal entity name"}
+          isRequired={true}
+          value={legalFormData.legalName}
+          onChange={(e) => setLegalField("legalName", e.target.value)}
+        />
 
         <div className="mt-4">
           <div className="mb-4">
@@ -364,24 +537,57 @@ const BusinessInfoForm = ({ dob, setDob }) => {
         <BasicSelectInput
           label={"Country"}
           isRequired={true}
-          options={["Bangladesh", "India", "Pakistan", "Sri Lanka"]}
+          options={[
+            "Select Country",
+            "Bangladesh",
+            "India",
+            "Pakistan",
+            "Sri Lanka",
+          ]}
+          value={legalFormData.country}
+          onChange={(e) => setLegalField("country", e.target.value)}
         />
 
-        <BasicTextInput label={"Street address"} isRequired={true} />
+        <BasicTextInput
+          label={"Street address"}
+          isRequired={true}
+          value={legalFormData.street}
+          onChange={(e) => setLegalField("street", e.target.value)}
+        />
 
         <div className="grid grid-cols-2 gap-4">
-          <BasicTextInput label={"City"} isRequired={true} />
-          <BasicTextInput label={"Postal code"} isRequired={true} />
+          <BasicTextInput
+            label={"City"}
+            isRequired={true}
+            value={legalFormData.city}
+            onChange={(e) => setLegalField("city", e.target.value)}
+          />
+          <BasicTextInput
+            label={"Postal code"}
+            isRequired={true}
+            value={legalFormData.zip}
+            onChange={(e) => setLegalField("zip", e.target.value)}
+          />
         </div>
 
-        <BasicTextInput label={"Phone number"} />
+        <BasicTextInput
+          label={"Phone number"}
+          isRequired={true}
+          value={legalFormData.phone}
+          onChange={(e) => setLegalField("phone", e.target.value)}
+        />
 
         <BasicTextInput
           label={"Business registration number"}
           isRequired={true}
+          value={legalFormData.registrationNo}
+          onChange={(e) => setLegalField("registrationNo", e.target.value)}
         />
 
-        <ComplianceCheckbox onChange={(val) => console.log("checked:", val)} />
+        <ComplianceCheckbox
+          checked={legalFormData.consented}
+          onChange={(val) => setLegalField("consented", val)}
+        />
       </div>
 
       <div className="mt-6 w-2/3">
@@ -403,12 +609,16 @@ const BusinessInfoForm = ({ dob, setDob }) => {
             label={"First name"}
             isRequired={true}
             placeholder={"Enter your first name"}
+            value={ownerFormData.firstName}
+            onChange={(e) => setOwnerField("firstName", e.target.value)}
           />
 
           <BasicTextInput
             label={"Last name"}
             isRequired={true}
             placeholder={"Enter your last name"}
+            value={ownerFormData.lastName}
+            onChange={(e) => setOwnerField("lastName", e.target.value)}
           />
         </div>
 
@@ -419,7 +629,15 @@ const BusinessInfoForm = ({ dob, setDob }) => {
         <BasicSelectInput
           label={"Country of residence"}
           isRequired={true}
-          options={["Bangladesh", "India", "Pakistan", "Sri Lanka"]}
+          options={[
+            "Select Country",
+            "Bangladesh",
+            "India",
+            "Pakistan",
+            "Sri Lanka",
+          ]}
+          value={ownerFormData.country}
+          onChange={(e) => setOwnerField("country", e.target.value)}
         />
 
         <div>
@@ -441,14 +659,34 @@ const BusinessInfoForm = ({ dob, setDob }) => {
             </p>
           </div>
 
-          <BasicTextInput label={"Street address"} isRequired={true} />
+          <BasicTextInput
+            label={"Street address"}
+            isRequired={true}
+            value={ownerFormData.street}
+            onChange={(e) => setOwnerField("street", e.target.value)}
+          />
 
           <div className="grid grid-cols-2 gap-4">
-            <BasicTextInput label={"City"} isRequired={true} />
-            <BasicTextInput label={"Postal code"} isRequired={true} />
+            <BasicTextInput
+              label={"City"}
+              isRequired={true}
+              value={ownerFormData.city}
+              onChange={(e) => setOwnerField("city", e.target.value)}
+            />
+            <BasicTextInput
+              label={"Postal code"}
+              isRequired={true}
+              value={ownerFormData.zip}
+              onChange={(e) => setOwnerField("zip", e.target.value)}
+            />
           </div>
 
-          <BasicTextInput label={"Phone number"} isRequired={true} />
+          <BasicTextInput
+            label={"Phone number"}
+            isRequired={true}
+            value={ownerFormData.phone}
+            onChange={(e) => setOwnerField("phone", e.target.value)}
+          />
         </div>
       </div>
     </div>

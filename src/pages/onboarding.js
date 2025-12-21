@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import ShopSetupStepper from "../components/onboard/stepCounter";
 import { StepOne } from "../components/onboard/stepone";
 import { useLocation } from "react-router-dom";
@@ -11,6 +11,43 @@ import { StepFive } from "../components/onboard/stepfive";
  * @function Onboarding
  **/
 
+const shopOwnerInfo = {
+  firstName: "",
+  lastName: "",
+  dob: "",
+  country: "",
+  street: "",
+  city: "",
+  zip: "",
+  dialCode: "",
+  phone: "",
+};
+
+const shopLegalInfo = {
+  legalName: "",
+  registrationNo: "",
+  taxId: "",
+  vatId: "",
+  consented: true,
+  country: "",
+  street: "",
+  city: "",
+  zip: "",
+  dialCode: "",
+  phone: "",
+};
+
+const shopPaymentInfo = {
+  accountHolder: "",
+  bankName: "",
+  accountNumber: "",
+  swiftCode: "",
+  branch: "",
+  routingNumber: "",
+  sortcode: "",
+  iban: "",
+};
+
 export const Onboarding = (props) => {
   const [steps, setSteps] = useState([
     { label: "Shop preferences", status: "current" },
@@ -21,6 +58,52 @@ export const Onboarding = (props) => {
   ]);
 
   const [currentStep, setCurrentStep] = useState(0);
+  const [shopLang, setShopLang] = React.useState("en");
+  const [shopCountry, setShopCountry] = React.useState("BD");
+  const [shopCurr, setShopCurr] = React.useState("BDT");
+  const [name, setName] = React.useState("");
+  const [shopType, setShopType] = React.useState("SOLE_PROPRIETOR");
+
+  const [ownerFormData, setOwnerFormData] = React.useState(shopOwnerInfo);
+  const [legalFormData, setLegalFormData] = React.useState(shopLegalInfo);
+  const [paymentFormData, setPaymentFormData] = React.useState(shopPaymentInfo);
+
+  const setOwnerField = useCallback((key, value) => {
+    setOwnerFormData((prev) => {
+      // optional guard to prevent pointless updates
+      if (prev[key] === value) return prev;
+      return { ...prev, [key]: value };
+    });
+  }, []);
+
+  const setLegalField = useCallback((key, value) => {
+    setLegalFormData((prev) => {
+      if (prev[key] === value) return prev;
+      return { ...prev, [key]: value };
+    });
+  }, []);
+
+  const setPaymentField = useCallback((key, value) => {
+    setPaymentFormData((prev) => {
+      if (prev[key] === value) return prev;
+      return { ...prev, [key]: value };
+    });
+  }, []);
+
+  const ownerFormHandler = useMemo(
+    () => ({ ownerFormData, setOwnerField, setOwnerFormData }),
+    [ownerFormData, setOwnerField]
+  );
+
+  const legalFormHandler = useMemo(
+    () => ({ legalFormData, setLegalField, setLegalFormData }),
+    [legalFormData, setLegalField]
+  );
+
+  const paymentFormHandler = useMemo(
+    () => ({ paymentFormData, setPaymentField, setPaymentFormData }),
+    [paymentFormData, setPaymentField]
+  );
 
   const { search } = useLocation();
 
@@ -48,11 +131,32 @@ export const Onboarding = (props) => {
       </div>
       <div className="border-b border-1 border-grey w-full" />
 
-      {currentStep === 0 && <StepOne setSteps={setSteps} />}
+      {currentStep === 0 && (
+        <StepOne
+          setSteps={setSteps}
+          shopLang={shopLang}
+          setShopLang={setShopLang}
+          shopCountry={shopCountry}
+          setShopCountry={setShopCountry}
+          shopCurr={shopCurr}
+          setShopCurr={setShopCurr}
+        />
+      )}
 
-      {currentStep === 1 && <StepTwo setSteps={setSteps} />}
+      {currentStep === 1 && (
+        <StepTwo setSteps={setSteps} name={name} setName={setName} />
+      )}
 
-      {currentStep === 2 && <StepThree setSteps={setSteps} />}
+      {currentStep === 2 && (
+        <StepThree
+          setSteps={setSteps}
+          {...ownerFormHandler}
+          {...legalFormHandler}
+          {...paymentFormHandler}
+          shopType={shopType}
+          setShopType={setShopType}
+        />
+      )}
 
       {currentStep === 3 && <StepFour setSteps={setSteps} />}
 

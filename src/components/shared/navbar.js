@@ -6,17 +6,11 @@ import {
   userIcon,
   wishListIcon,
 } from "../../assets/SvgIcons";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { logo_black } from "../../assets";
 import MegaMenu from "./megamenu";
 import MinimalDropdown from "./profiledropdown";
-
-const navIcons = [
-  { icon: wishListIcon, link: "/wishlist", title: "Wishlist" },
-  { icon: shopIcon, link: "/my-shop/dashboard", title: "Shop Manager" },
-  { icon: userIcon, link: "", title: "Your Account" },
-  { icon: cartIcon, link: "/cart", title: "Cart" },
-];
+import axiosInstance from "../../redux/helpers/axios";
 
 /**
  * @author
@@ -24,6 +18,43 @@ const navIcons = [
  **/
 
 export const Navbar = (props) => {
+  const navigate = useNavigate();
+
+  const [loading, setLoading] = React.useState(false);
+
+  const openShopManager = async () => {
+    setLoading(true);
+    try {
+      const res = await axiosInstance.get(`/user/services/validate-shop`);
+      if (res.status === 200) {
+        const { hasActiveShop, shopStatus, shop } = res.data;
+        if (hasActiveShop && shopStatus === "ACTIVE") {
+          navigate("/my-shop/dashboard");
+        } else if (!hasActiveShop && shopStatus !== "ACTIVE") {
+          navigate("/merchant/onboarding/status", {
+            state: { shopStatus, shop },
+          });
+        } else {
+          navigate("/merchant/onboarding?step=0");
+        }
+      }
+    } catch (error) {
+      const { data } = error?.response;
+      if (data?.error === "SHOP_NOT_FOUND") {
+        navigate("/merchant/onboarding?step=0");
+      } else {
+        console.error("Error validating shop:", error);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+  const navIcons = [
+    { icon: wishListIcon, link: "/wishlist", title: "Wishlist" },
+    { icon: shopIcon, onClick: openShopManager, title: "Shop Manager" },
+    { icon: userIcon, link: "", title: "Your Account" },
+    { icon: cartIcon, link: "/cart", title: "Cart" },
+  ];
   return (
     <nav className="w-full bg-primary">
       <div className="flex items-center justify-between py-3 max-w-[1380px] mx-auto">
@@ -56,13 +87,21 @@ export const Navbar = (props) => {
               <React.Fragment key={index}>
                 {item.link ? (
                   <Link
-                    key={index}
                     to={item.link}
                     title={item.title}
                     className="mx-2 hover:bg-gray-200 px-2 py-2 rounded-full"
                   >
                     {item.icon}
                   </Link>
+                ) : item.onClick ? (
+                  <button
+                    type="button"
+                    onClick={item.onClick}
+                    title={item.title}
+                    className="mx-2 hover:bg-gray-200 px-2 py-2 rounded-full"
+                  >
+                    {item.icon}
+                  </button>
                 ) : (
                   <MinimalDropdown />
                 )}
