@@ -11,6 +11,9 @@ import { logo_black } from "../../assets";
 import MegaMenu from "./megamenu";
 import MinimalDropdown from "./profiledropdown";
 import axiosInstance from "../../redux/helpers/axios";
+import { useSelector } from "react-redux";
+import { usePageLoading } from "../context/loading";
+import { errorToast } from "../../utils/toast";
 
 /**
  * @author
@@ -20,11 +23,21 @@ import axiosInstance from "../../redux/helpers/axios";
 export const Navbar = (props) => {
   const navigate = useNavigate();
 
-  const [loading, setLoading] = React.useState(false);
+  const { setPageLoading } = usePageLoading();
+
+  const auth = useSelector((state) => state.auth);
 
   const openShopManager = async () => {
-    setLoading(true);
+    setPageLoading(true);
     try {
+      if (!auth?.authenticate) {
+        navigate(
+          `/user/auth?tab=login&redirect=${encodeURIComponent(
+            "/merchant/onboarding"
+          )}`
+        );
+        return;
+      }
       const res = await axiosInstance.get(`/user/services/validate-shop`);
       if (res.status === 200) {
         const { hasActiveShop, shopStatus, shop } = res.data;
@@ -39,16 +52,22 @@ export const Navbar = (props) => {
         }
       }
     } catch (error) {
-      const { data } = error?.response;
+      console.log(error);
+
+      const data = error?.response?.data;
       if (data?.error === "SHOP_NOT_FOUND") {
         navigate("/merchant/onboarding?step=0");
       } else {
         console.error("Error validating shop:", error);
+        errorToast(
+          data?.msg || "Could not open Shop Manager. Please try again later."
+        );
       }
     } finally {
-      setLoading(false);
+      setPageLoading(false);
     }
   };
+
   const navIcons = [
     { icon: wishListIcon, link: "/wishlist", title: "Wishlist" },
     { icon: shopIcon, onClick: openShopManager, title: "Shop Manager" },

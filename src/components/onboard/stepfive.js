@@ -97,13 +97,12 @@ By selecting “I agree” you confirm:
 `;
 
 export const StepFive = ({
-  onBack = () => {},
-  onFinish = (consent) => console.log("finish", consent),
   policies = {
     terms: "/legal/terms",
     privacy: "/legal/privacy",
     seller: "/legal/seller-policies",
   },
+  handleShopCreate,
 }) => {
   const [checked, setChecked] = useState(false);
   const panelRef = useRef(null);
@@ -200,17 +199,17 @@ export const StepFive = ({
         </div> */}
 
         <div className="flex justify-end mt-6">
-          <div
+          <button
             disabled={!checked}
             className={`rounded-full bg-black py-3 px-6 ${
               checked
                 ? "bg-[#2F5651] hover:opacity-90 hover:shadow-lg hover:shadow-black/40 cursor-pointer"
                 : "bg-gray-400 cursor-not-allowed"
             }`}
-            // onClick={handleSaveAndContinue}
+            onClick={() => handleShopCreate()}
           >
             <p className="text-md font-semibold text-white"> Agree & Finish</p>
-          </div>
+          </button>
         </div>
 
         {/* Small note */}

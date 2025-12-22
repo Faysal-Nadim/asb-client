@@ -24,6 +24,8 @@ import { isUserLoggedIn } from "./redux/actions";
 import PrivateRoute from "./components/hoc/private";
 import { OnboardStatus } from "./pages/status/onboard";
 import { SystemLayout } from "./components/layout/system";
+import { AuthPage } from "./pages/auth";
+import { PageLoadingProvider } from "./components/context/loading";
 
 function App() {
   const auth = useSelector((state) => state.auth);
@@ -37,107 +39,120 @@ function App() {
 
   return (
     <div className="App">
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <GlobalLayout>
-              <Home />
-            </GlobalLayout>
-          }
-        />
+      <PageLoadingProvider>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <GlobalLayout>
+                <Home />
+              </GlobalLayout>
+            }
+          />
 
-        <Route
-          path="/product/:permalink"
-          element={
-            <GlobalLayout>
-              <Product />
-            </GlobalLayout>
-          }
-        />
+          <Route
+            path="/user/auth"
+            element={
+              <SystemLayout type={"Authentication"}>
+                <AuthPage />
+              </SystemLayout>
+            }
+          />
 
-        <Route
-          path="/merchant/onboarding"
-          element={
-            <GlobalLayout>
-              <Onboarding />
-            </GlobalLayout>
-          }
-        />
+          <Route
+            path="/product/:permalink"
+            element={
+              <GlobalLayout>
+                <Product />
+              </GlobalLayout>
+            }
+          />
 
-        <Route
-          path="/merchant/onboarding/status"
-          element={
-            <SystemLayout type={"Merchant Onboarding"}>
-              <OnboardStatus />
-            </SystemLayout>
-          }
-        />
+          <Route
+            path="/merchant/onboarding"
+            element={
+              <GlobalLayout>
+                <PrivateRoute>
+                  <Onboarding />
+                </PrivateRoute>
+              </GlobalLayout>
+            }
+          />
 
-        <Route
-          path="/cart"
-          element={
-            <GlobalLayout>
-              <Cart />
-            </GlobalLayout>
-          }
-        />
+          <Route
+            path="/merchant/onboarding/status"
+            element={
+              <SystemLayout type={"Merchant Onboarding"}>
+                <OnboardStatus />
+              </SystemLayout>
+            }
+          />
 
-        <Route
-          path="/wishlist"
-          element={
-            <GlobalLayout>
-              <Wishlist />
-            </GlobalLayout>
-          }
-        />
+          <Route
+            path="/cart"
+            element={
+              <GlobalLayout>
+                <Cart />
+              </GlobalLayout>
+            }
+          />
 
-        <Route
-          path="/my-shop/*"
-          element={
-            <ShopLayout>
-              <Outlet />
-            </ShopLayout>
-          }
-        >
-          <Route index element={<Dashboard />} />
-          <Route path={"dashboard"} element={<Dashboard />} />
-          <Route path={"products"} element={<Products />} />
-          <Route path={"orders"} element={<Orders />} />
-          <Route path={"reports"} element={<Reports />} />
-          <Route path={"coupons"} element={<Coupons />} />
-          <Route path={"earnings"} element={<Earnings />} />
-        </Route>
+          <Route
+            path="/wishlist"
+            element={
+              <GlobalLayout>
+                <Wishlist />
+              </GlobalLayout>
+            }
+          />
 
-        <Route
-          path="/shop/:permalink"
-          element={
-            <GlobalLayout>
-              <ShopDetails />
-            </GlobalLayout>
-          }
-        />
+          <Route
+            path="/my-shop/*"
+            element={
+              <ShopLayout>
+                <Outlet />
+              </ShopLayout>
+            }
+          >
+            <Route index element={<Dashboard />} />
+            <Route path={"dashboard"} element={<Dashboard />} />
+            <Route path={"products"} element={<Products />} />
+            <Route path={"orders"} element={<Orders />} />
+            <Route path={"reports"} element={<Reports />} />
+            <Route path={"coupons"} element={<Coupons />} />
+            <Route path={"earnings"} element={<Earnings />} />
+          </Route>
 
-        <Route
-          path="/user/account"
-          element={
-            <GlobalLayout>
-              <PrivateRoute>
-                <Account />
-              </PrivateRoute>
-            </GlobalLayout>
-          }
-        />
-        <Route
-          path="/user/orders"
-          element={
-            <GlobalLayout>
-              <Order />
-            </GlobalLayout>
-          }
-        />
-      </Routes>
-      <Toaster position="top-center" reverseOrder={false} />
+          <Route
+            path="/shop/:permalink"
+            element={
+              <GlobalLayout>
+                <ShopDetails />
+              </GlobalLayout>
+            }
+          />
+
+          <Route
+            path="/user/account"
+            element={
+              <GlobalLayout>
+                <PrivateRoute>
+                  <Account />
+                </PrivateRoute>
+              </GlobalLayout>
+            }
+          />
+          <Route
+            path="/user/orders"
+            element={
+              <GlobalLayout>
+                <Order />
+              </GlobalLayout>
+            }
+          />
+        </Routes>
+        <Toaster position="top-center" reverseOrder={false} />
+      </PageLoadingProvider>
     </div>
   );
 }

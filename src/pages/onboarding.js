@@ -6,49 +6,64 @@ import { StepTwo } from "../components/onboard/steptwo";
 import { StepThree } from "../components/onboard/stepthree";
 import { StepFour } from "../components/onboard/stepfour";
 import { StepFive } from "../components/onboard/stepfive";
+import { useDispatch } from "react-redux";
+import { createShop } from "../redux/actions";
 /**
  * @author
  * @function Onboarding
  **/
 
 const shopOwnerInfo = {
-  firstName: "",
-  lastName: "",
-  dob: "",
-  country: "",
-  street: "",
-  city: "",
-  zip: "",
-  dialCode: "",
-  phone: "",
+  firstName: null,
+  lastName: null,
+  dob: null,
+  country: null,
+  street: null,
+  city: null,
+  zip: null,
+  dialCode: null,
+  phone: null,
 };
 
 const shopLegalInfo = {
-  legalName: "",
-  registrationNo: "",
-  taxId: "",
-  vatId: "",
-  consented: true,
-  country: "",
-  street: "",
-  city: "",
-  zip: "",
-  dialCode: "",
-  phone: "",
+  legalName: null,
+  registrationNo: null,
+  taxId: null,
+  vatId: null,
+  consented: false,
+  country: null,
+  street: null,
+  city: null,
+  zip: null,
+  dialCode: null,
+  phone: null,
 };
 
 const shopPaymentInfo = {
-  accountHolder: "",
-  bankName: "",
-  accountNumber: "",
-  swiftCode: "",
-  branch: "",
-  routingNumber: "",
-  sortcode: "",
-  iban: "",
+  accountHolder: null,
+  bankName: null,
+  accountNumber: null,
+  swiftCode: null,
+  branch: null,
+  routingNumber: null,
+  sortcode: null,
+  iban: null,
+};
+
+const indentificationInfo = {
+  identificationType: "NID",
+  identificationNo: null,
+  identificationDoc: null,
+  ownerPhoto: null,
+  businessRegDoc: null,
+  taxDoc: null,
+  vatDoc: null,
+  additionalDoc: null,
 };
 
 export const Onboarding = (props) => {
+  const dispatch = useDispatch();
+
   const [steps, setSteps] = useState([
     { label: "Shop preferences", status: "current" },
     { label: "Name your shop", status: "upcoming" },
@@ -67,6 +82,23 @@ export const Onboarding = (props) => {
   const [ownerFormData, setOwnerFormData] = React.useState(shopOwnerInfo);
   const [legalFormData, setLegalFormData] = React.useState(shopLegalInfo);
   const [paymentFormData, setPaymentFormData] = React.useState(shopPaymentInfo);
+  const [identificationFormData, setIdentificationFormData] =
+    React.useState(indentificationInfo);
+
+  const handleShopCreate = () => {
+    const data = {
+      shopLang,
+      shopCountry,
+      shopCurr,
+      name,
+      shopType,
+      ownerInfo: ownerFormData,
+      legalInfo: legalFormData,
+      payoutMethod: paymentFormData,
+      verification: identificationFormData,
+    };
+    dispatch(createShop(data));
+  };
 
   const setOwnerField = useCallback((key, value) => {
     setOwnerFormData((prev) => {
@@ -90,6 +122,13 @@ export const Onboarding = (props) => {
     });
   }, []);
 
+  const setIdentificationField = useCallback((key, value) => {
+    setIdentificationFormData((prev) => {
+      if (prev[key] === value) return prev;
+      return { ...prev, [key]: value };
+    });
+  }, []);
+
   const ownerFormHandler = useMemo(
     () => ({ ownerFormData, setOwnerField, setOwnerFormData }),
     [ownerFormData, setOwnerField]
@@ -103,6 +142,15 @@ export const Onboarding = (props) => {
   const paymentFormHandler = useMemo(
     () => ({ paymentFormData, setPaymentField, setPaymentFormData }),
     [paymentFormData, setPaymentField]
+  );
+
+  const identificationFormHandler = useMemo(
+    () => ({
+      identificationFormData,
+      setIdentificationField,
+      setIdentificationFormData,
+    }),
+    [identificationFormData, setIdentificationField]
   );
 
   const { search } = useLocation();
@@ -158,9 +206,13 @@ export const Onboarding = (props) => {
         />
       )}
 
-      {currentStep === 3 && <StepFour setSteps={setSteps} />}
+      {currentStep === 3 && (
+        <StepFour setSteps={setSteps} {...identificationFormHandler} />
+      )}
 
-      {currentStep === 4 && <StepFive setSteps={setSteps} />}
+      {currentStep === 4 && (
+        <StepFive setSteps={setSteps} handleShopCreate={handleShopCreate} />
+      )}
     </div>
   );
 };

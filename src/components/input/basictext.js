@@ -89,6 +89,8 @@ const BasicSelectInput = ({
       <p id="tooltip" className="text-xs text-black">
         {tooltip}
       </p>
+
+      {errorText && <p className="text-sm text-rose-600">{errorText}</p>}
     </div>
   );
 };
@@ -129,7 +131,7 @@ const DOBInput = ({
   const handle = (k, v) => onChange({ ...value, [k]: v });
 
   return (
-    <div className="w-full">
+    <div className="w-full mb-4">
       {/* Label */}
       <label className="block mb-2 text-black font-semibold text-md">
         {label}

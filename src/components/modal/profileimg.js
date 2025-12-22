@@ -23,7 +23,7 @@ export const ProfileImgModal = ({ isOpen, onClose }) => {
     setUploading(true);
     try {
       const res = await axiosInstance.get(
-        `/user/services/get-presigned-url?fileName=${profileImg.name}&contentType=${profileImg.type}`
+        `/user/services/get-presigned-url?fileName=${profileImg.name}&contentType=${profileImg.type}&reqType=profileImage`
       );
 
       const { uploadUrl, key, path } = res.data;

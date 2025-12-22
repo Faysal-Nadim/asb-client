@@ -10,7 +10,7 @@ import { logo_black } from "../../assets";
 export const SystemNav = ({ type }) => {
   return (
     <nav className="w-full bg-primary">
-      <div className="flex items-center justify-between py-3 max-w-[1380px] mx-auto">
+      <div className="flex items-center justify-between py-6 max-w-[1380px] mx-auto">
         {/* Logo and Categories */}
         <div className="flex items-center justify-between w-full px-4">
           <Link to={"/"}>

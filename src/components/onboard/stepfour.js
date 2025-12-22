@@ -1,8 +1,10 @@
 // components/DocumentVerification.jsx
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axiosInstance from "../../redux/helpers/axios";
+import axios from "axios";
 
-const MAX_MB = 5;
+const MAX_MB = 10;
 const ACCEPT_IMG = ["image/jpeg", "image/png", "image/webp"];
 const bytes = (mb) => mb * 1024 * 1024;
 
@@ -120,7 +122,11 @@ function FileDrop({
   );
 }
 
-export const StepFour = ({ onSubmit, setSteps }) => {
+export const StepFour = ({
+  setSteps,
+  identificationFormData,
+  setIdentificationField,
+}) => {
   const navigate = useNavigate();
 
   const [nidNumber, setNidNumber] = useState("");
@@ -128,6 +134,148 @@ export const StepFour = ({ onSubmit, setSteps }) => {
   const [nidBack, setNidBack] = useState(null);
   const [selfie, setSelfie] = useState(null);
   const [agree, setAgree] = useState(false);
+
+  const [identificationDoc, setIdentificationDoc] = useState({
+    nidFrontPath: "",
+    nidBackPath: "",
+    nidFrontKey: "",
+    nidBackKey: "",
+  });
+
+  const [ownerPhoto, setOwnerPhoto] = useState({
+    path: "",
+    key: "",
+  });
+
+  useEffect(() => {
+    if (!selfie) return;
+    let cancelled = false;
+
+    const uploadSelfie = async () => {
+      try {
+        const res = await axiosInstance.get(
+          `/user/services/get-presigned-url?fileName=${selfie.name}&contentType=${selfie.type}&reqType=id`
+        );
+        const { uploadUrl, key, path } = res.data;
+
+        await axios.put(uploadUrl, selfie, {
+          headers: {
+            "Content-Type": selfie.type,
+            "Cache-Control": "public, max-age=31536000, immutable",
+          },
+        });
+        if (cancelled) return;
+
+        setOwnerPhoto({ key, path });
+      } catch (error) {
+        console.error("Error uploading selfie:", error);
+      }
+    };
+
+    uploadSelfie();
+    return () => {
+      cancelled = true;
+    };
+  }, [selfie, setOwnerPhoto]);
+
+  useEffect(() => {
+    if (!nidFront) return;
+
+    let cancelled = false;
+
+    const uploadNidFront = async () => {
+      try {
+        const res = await axiosInstance.get(
+          `/user/services/get-presigned-url?fileName=${encodeURIComponent(
+            nidFront.name
+          )}&contentType=${encodeURIComponent(nidFront.type)}&reqType=id`
+        );
+
+        const { uploadUrl, key, path } = res.data;
+
+        await axios.put(uploadUrl, nidFront, {
+          headers: {
+            "Content-Type": nidFront.type,
+            "Cache-Control": "public, max-age=31536000, immutable",
+          },
+        });
+
+        if (cancelled) return;
+
+        setIdentificationDoc((prev) => {
+          const next = {
+            ...prev,
+            nidFrontKey: key,
+            nidFrontPath: path,
+          };
+
+          // ✅ use the same "next" (NOT stale identificationDoc)
+          // setIdentificationField("identificationDoc", next);
+
+          return next;
+        });
+      } catch (error) {
+        console.error("Error uploading nidFront:", error);
+      }
+    };
+
+    uploadNidFront();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [nidFront, setIdentificationDoc]);
+
+  useEffect(() => {
+    if (!nidBack) return;
+
+    let cancelled = false;
+
+    const uploadNidBack = async () => {
+      try {
+        const res = await axiosInstance.get(
+          `/user/services/get-presigned-url?fileName=${nidBack.name}&contentType=${nidBack.type}&reqType=id`
+        );
+
+        const { uploadUrl, key, path } = res.data;
+
+        await axios.put(uploadUrl, nidBack, {
+          headers: {
+            "Content-Type": nidBack.type,
+            "Cache-Control": "public, max-age=31536000, immutable",
+          },
+        });
+
+        if (cancelled) return;
+
+        setIdentificationDoc((prev) => {
+          const next = {
+            ...prev,
+            nidBackKey: key,
+            nidBackPath: path,
+          };
+
+          // ✅ use the same "next" (NOT stale identificationDoc)
+          // setIdentificationField("identificationDoc", next);
+
+          return next;
+        });
+      } catch (error) {
+        console.error("Error uploading nidBack:", error);
+      }
+    };
+
+    uploadNidBack();
+    return () => {
+      cancelled = true;
+    };
+  }, [nidBack, setIdentificationDoc]);
+
+  useEffect(() => {
+    // Update identificationDoc in parent state whenever it changes
+    setIdentificationField("identificationDoc", identificationDoc);
+    setIdentificationField("ownerPhoto", ownerPhoto);
+  }, [identificationDoc, ownerPhoto, setIdentificationField]);
 
   const errors = useMemo(() => {
     const e = {};
@@ -138,23 +286,6 @@ export const StepFour = ({ onSubmit, setSteps }) => {
   }, [nidNumber, nidFront, selfie]);
 
   const valid = Object.keys(errors).length === 0 && agree;
-
-  const submit = (e) => {
-    e.preventDefault();
-    if (!valid) return;
-    const payload = {
-      nidNumber,
-      files: { nidFront, nidBack, selfie },
-    };
-    onSubmit?.(payload);
-    // Example: call your API with FormData
-    // const fd = new FormData();
-    // fd.append("nidNumber", nidNumber);
-    // fd.append("nidFront", nidFront);
-    // if (nidBack) fd.append("nidBack", nidBack);
-    // fd.append("selfie", selfie);
-    // await fetch("/api/verification", { method: "POST", body: fd });
-  };
 
   const handleSaveAndContinue = () => {
     setSteps((prevSteps) =>
@@ -170,7 +301,7 @@ export const StepFour = ({ onSubmit, setSteps }) => {
   };
 
   return (
-    <form onSubmit={submit} className="max-w-3xl mx-auto p-4 space-y-6">
+    <div className="max-w-3xl mx-auto p-4 space-y-6">
       <header>
         <h1 className="text-2xl font-semibold text-gray-900">
           Verify your identity
@@ -190,8 +321,11 @@ export const StepFour = ({ onSubmit, setSteps }) => {
           type="text"
           inputMode="numeric"
           placeholder="Enter your NID number"
-          value={nidNumber}
-          onChange={(e) => setNidNumber(e.target.value)}
+          value={identificationFormData.identificationNo || nidNumber}
+          onChange={(e) => {
+            setNidNumber(e.target.value);
+            setIdentificationField("identificationNo", e.target.value);
+          }}
           className={`w-full rounded-lg border px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-gray-300 ${
             errors.nid ? "border-rose-500" : "border-gray-300"
           }`}
@@ -266,29 +400,8 @@ export const StepFour = ({ onSubmit, setSteps }) => {
         verification data after processing when allowed by law.
       </p>
 
-      {/* Actions */}
-      {/* <div className="flex items-center gap-3 pt-2">
-        <button
-          type="submit"
-          disabled={!valid}
-          className={`h-11 px-5 rounded-full text-white font-semibold transition ${
-            valid
-              ? "bg-[#2F5651] hover:opacity-90"
-              : "bg-gray-400 cursor-not-allowed"
-          }`}
-        >
-          Submit for review
-        </button>
-        <button
-          type="button"
-          className="h-11 px-5 rounded-full border border-gray-300 hover:bg-gray-50"
-        >
-          Save draft
-        </button>
-      </div> */}
-
       <div className="flex justify-end">
-        <div
+        <button
           disabled={!valid}
           className={`rounded-full bg-black py-3 px-6 ${
             valid
@@ -298,8 +411,8 @@ export const StepFour = ({ onSubmit, setSteps }) => {
           onClick={handleSaveAndContinue}
         >
           <p className="text-md font-semibold text-white">Save & continue</p>
-        </div>
+        </button>
       </div>
-    </form>
+    </div>
   );
 };
