@@ -12,6 +12,7 @@ import {
   supportIcon,
 } from "../../assets/SvgIcons";
 import { NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 /**
  * @author
@@ -89,6 +90,14 @@ export const Sidebar = () => {
 
   const handleClose = () => setIsOpen(false);
 
+  const { shopDetails } = useSelector((state) => state.shop);
+
+  const getCountryName = (code) => {
+    if (!code) return null;
+    const regionNames = new Intl.DisplayNames(["en"], { type: "region" });
+    return regionNames.of(code);
+  };
+
   return (
     <>
       {/* Mobile top bar with menu button */}
@@ -130,13 +139,15 @@ export const Sidebar = () => {
             <img
               src="https://aleeha-test.s3.ap-southeast-1.amazonaws.com/rr-2.png"
               alt="Retro Revive Logo"
-              className="rounded-full w-10 h-10 object-contain border"
+              className="rounded-full w-12 h-12 object-contain border"
             />
             <div>
               <h2 className="text-xl font-semibold tracking-tight">
-                Retro Revive
+                {shopDetails?.name || "My Shop"}
               </h2>
-              <p className="text-xs text-gray-500 mt-1">Dhaka, Bangladesh</p>
+              <p className="text-xs text-gray-500 mt-1">
+                {getCountryName(shopDetails?.shopCountry) || "Location"}
+              </p>
             </div>
           </div>
 

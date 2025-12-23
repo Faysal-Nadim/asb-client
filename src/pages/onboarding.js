@@ -1,13 +1,15 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import ShopSetupStepper from "../components/onboard/stepCounter";
 import { StepOne } from "../components/onboard/stepone";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { StepTwo } from "../components/onboard/steptwo";
 import { StepThree } from "../components/onboard/stepthree";
 import { StepFour } from "../components/onboard/stepfour";
 import { StepFive } from "../components/onboard/stepfive";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { createShop } from "../redux/actions";
+import { usePageLoading } from "../components/context/loading";
+import { LoadingModal } from "../components/modal/loading";
 /**
  * @author
  * @function Onboarding
@@ -63,6 +65,14 @@ const indentificationInfo = {
 
 export const Onboarding = (props) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const { isAllowed } = location.state || {};
+
+  const { pageLoading, setPageLoading } = usePageLoading();
+
+  const shop = useSelector((state) => state.shop);
 
   const [steps, setSteps] = useState([
     { label: "Shop preferences", status: "current" },
@@ -99,6 +109,24 @@ export const Onboarding = (props) => {
     };
     dispatch(createShop(data));
   };
+
+  useEffect(() => {
+    if (shop.loading) {
+      // Show loading indicator
+      setPageLoading(true);
+    } else {
+      // Hide loading indicator
+      setPageLoading(false);
+    }
+  }, [shop.loading, setPageLoading]);
+
+  useEffect(() => {
+    if (shop.shopCreated) {
+      navigate("/merchant/onboarding/status", {
+        state: { shopStatus: "PENDING", shop: { name: name } },
+      });
+    }
+  }, [shop.shopCreated, name, navigate]);
 
   const setOwnerField = useCallback((key, value) => {
     setOwnerFormData((prev) => {
@@ -167,8 +195,15 @@ export const Onboarding = (props) => {
     window.scrollTo(0, 0);
   }, []);
 
+  useEffect(() => {
+    if (!isAllowed) {
+      navigate("/");
+    }
+  }, [isAllowed, navigate]);
+
   return (
     <div className="w-full bg-primary">
+      {pageLoading && <LoadingModal text="Loading..." />}
       <div className="p-8 max-w-[1380px] mx-auto">
         <ShopSetupStepper
           steps={steps}

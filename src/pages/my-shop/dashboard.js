@@ -1,30 +1,17 @@
 // Dashboard.jsx
-import React from "react";
-import { earningsIcon, oordersIcon } from "../../assets/SvgIcons";
+import React, { useEffect } from "react";
+import {
+  bdtIcon,
+  euroIcon,
+  oordersIcon,
+  poundIcon,
+  usdIcon,
+} from "../../assets/SvgIcons";
 import { RecentOrdersTable } from "../../components/shopmanager/recentorders";
 import { SellerOverviewSection } from "../../components/shopmanager/selleroverview";
 import { StatsSection } from "../../components/shopmanager/stats";
-
-const stats = [
-  {
-    label: "Total Revenue",
-    value: "$15,278",
-    subLabel: "Revenue increases this month",
-    badge: "+3.15%",
-    badgeColor: "bg-emerald-100 text-emerald-600",
-    iconBg: "bg-orange-100",
-    iconText: earningsIcon,
-  },
-  {
-    label: "Total Orders",
-    value: "20,309",
-    subLabel: "9.75% increase in order last week",
-    badge: "+9.75%",
-    badgeColor: "bg-emerald-100 text-emerald-600",
-    iconBg: "bg-sky-100",
-    iconText: oordersIcon,
-  },
-];
+import { useDispatch, useSelector } from "react-redux";
+import { getBasicShopDetails } from "../../redux/actions";
 
 const demoOrders = [
   {
@@ -85,6 +72,44 @@ const demoOrders = [
 ];
 
 export const Dashboard = () => {
+  const dispatch = useDispatch();
+
+  const { shopDetails } = useSelector((state) => state.shop);
+
+  useEffect(() => {
+    document.title = "Dashboard - My Shop | Aleeha";
+
+    dispatch(getBasicShopDetails());
+  }, [dispatch]);
+
+  const stats = [
+    {
+      label: "Total Revenue",
+      value: "$15,278",
+      subLabel: "Revenue increases this month",
+      badge: "+3.15%",
+      badgeColor: "bg-emerald-100 text-emerald-600",
+      iconBg: "bg-orange-100",
+      iconText:
+        shopDetails?.shopCurr === "BDT"
+          ? bdtIcon
+          : shopDetails?.shopCurr === "USD"
+          ? usdIcon
+          : shopDetails?.shopCurr === "EUR"
+          ? euroIcon
+          : poundIcon,
+    },
+    {
+      label: "Total Orders",
+      value: "20,309",
+      subLabel: "9.75% increase in order last week",
+      badge: "+9.75%",
+      badgeColor: "bg-emerald-100 text-emerald-600",
+      iconBg: "bg-sky-100",
+      iconText: oordersIcon,
+    },
+  ];
+
   return (
     <div className="max-w-[1380px] mx-auto py-4 space-y-4">
       {/* Top stats cards */}
