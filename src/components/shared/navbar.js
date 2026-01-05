@@ -14,6 +14,8 @@ import axiosInstance from "../../redux/helpers/axios";
 import { useSelector } from "react-redux";
 import { usePageLoading } from "../context/loading";
 import { errorToast } from "../../utils/toast";
+import { store } from "../../redux";
+import { userSignOut } from "../../redux/actions";
 
 /**
  * @author
@@ -22,6 +24,7 @@ import { errorToast } from "../../utils/toast";
 
 export const Navbar = (props) => {
   const navigate = useNavigate();
+  const dispatch = store.dispatch;
 
   const { setPageLoading } = usePageLoading();
 
@@ -52,15 +55,18 @@ export const Navbar = (props) => {
         }
       }
     } catch (error) {
-      console.log(error);
-
       const data = error?.response?.data;
       if (data?.error === "SHOP_NOT_FOUND") {
         navigate("/merchant/onboarding?step=0");
       } else {
-        console.error("Error validating shop:", error);
         errorToast(
           data?.msg || "Could not open Shop Manager. Please try again later."
+        );
+        dispatch(userSignOut());
+        navigate(
+          `/user/auth?tab=login&redirect=${encodeURIComponent(
+            "/merchant/onboarding"
+          )}`
         );
       }
     } finally {

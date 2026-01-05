@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   couponsIcon,
   earningsIcon,
@@ -12,7 +12,8 @@ import {
   supportIcon,
 } from "../../assets/SvgIcons";
 import { NavLink } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getBasicShopDetails } from "../../redux/actions";
 
 /**
  * @author
@@ -86,6 +87,8 @@ const sidebarOptions = [
 ];
 
 export const Sidebar = () => {
+  const dispatch = useDispatch();
+
   const [isOpen, setIsOpen] = useState(false);
 
   const handleClose = () => setIsOpen(false);
@@ -97,6 +100,10 @@ export const Sidebar = () => {
     const regionNames = new Intl.DisplayNames(["en"], { type: "region" });
     return regionNames.of(code);
   };
+
+  useEffect(() => {
+    dispatch(getBasicShopDetails());
+  }, [dispatch]);
 
   return (
     <>

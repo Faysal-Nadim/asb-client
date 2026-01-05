@@ -8,7 +8,7 @@ const initState = {
   shopDetails: null,
 };
 
-export const shopReducer = (state = initState, action) => {
+export default function shopReducer(state = initState, action) {
   switch (action.type) {
     case shopConstants.CREATE_SHOP_REQUEST:
       return {
@@ -54,4 +54,4 @@ export const shopReducer = (state = initState, action) => {
     default:
       return state;
   }
-};
+}

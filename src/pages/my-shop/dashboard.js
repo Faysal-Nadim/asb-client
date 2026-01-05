@@ -10,8 +10,7 @@ import {
 import { RecentOrdersTable } from "../../components/shopmanager/recentorders";
 import { SellerOverviewSection } from "../../components/shopmanager/selleroverview";
 import { StatsSection } from "../../components/shopmanager/stats";
-import { useDispatch, useSelector } from "react-redux";
-import { getBasicShopDetails } from "../../redux/actions";
+import { useSelector } from "react-redux";
 
 const demoOrders = [
   {
@@ -72,15 +71,11 @@ const demoOrders = [
 ];
 
 export const Dashboard = () => {
-  const dispatch = useDispatch();
-
   const { shopDetails } = useSelector((state) => state.shop);
 
   useEffect(() => {
     document.title = "Dashboard - My Shop | Aleeha";
-
-    dispatch(getBasicShopDetails());
-  }, [dispatch]);
+  }, []);
 
   const stats = [
     {
