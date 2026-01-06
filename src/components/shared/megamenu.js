@@ -2,6 +2,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { trippleBarIcon } from "../../assets/SvgIcons";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllCategories } from "../../redux/actions";
+import { CDN } from "../../redux/helpers/urlConfig";
 
 const CATEGORIES = [
   {
@@ -82,6 +85,10 @@ const CATEGORIES = [
 ];
 
 export default function MegaMenu() {
+  const dispatch = useDispatch();
+
+  const { categories } = useSelector((state) => state.category);
+
   const [open, setOpen] = useState(false);
   const [anim, setAnim] = useState(false); // for fade/slide
   const [activeIndex, setActiveIndex] = useState(0);
@@ -90,10 +97,15 @@ export default function MegaMenu() {
   const panelRef = useRef(null);
   const btnRef = useRef(null);
 
+  function fetchCategories() {
+    dispatch(getAllCategories());
+  }
+
   // Open with animation
   const openMenu = () => {
     setOpen(true);
     requestAnimationFrame(() => setAnim(true));
+    if (categories.length === 0) fetchCategories();
   };
   // Close with animation
   const closeMenu = () => {
@@ -213,7 +225,7 @@ export default function MegaMenu() {
             {/* Left: categories */}
             <div className="w-72 max-h-[70vh] overflow-auto border-r p-2">
               <ul className="space-y-1">
-                {CATEGORIES.map((cat, i) => (
+                {categories.map((cat, i) => (
                   <li key={cat.name}>
                     <button
                       type="button"
@@ -248,11 +260,11 @@ export default function MegaMenu() {
             <div className="flex-1 p-6">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold">
-                  All {CATEGORIES[activeIndex]?.name}
+                  All {categories[activeIndex]?.name}
                 </h3>
                 <Link
                   to={`/c/${encodeURIComponent(
-                    CATEGORIES[activeIndex]?.name || ""
+                    categories[activeIndex]?.slug || ""
                   )}`}
                   className="text-sm font-medium text-gray-700 hover:underline"
                   onClick={closeMenu}
@@ -262,22 +274,28 @@ export default function MegaMenu() {
               </div>
 
               <div className="grid grid-cols-3 gap-6">
-                {CATEGORIES[activeIndex]?.items?.map((it) => (
+                {categories[activeIndex]?.children?.map((it) => (
                   <Link
-                    key={it.label}
-                    to={it.link}
+                    key={it.id}
+                    to={
+                      it.slug
+                        ? `/c/${encodeURIComponent(
+                            categories[activeIndex]?.slug
+                          )}/${encodeURIComponent(it.slug)}`
+                        : "#"
+                    }
                     data-card="true"
                     className="group rounded-xl border border-gray-100 hover:shadow-md transition p-3 focus:outline-none focus:ring-2 focus:ring-gray-300"
                     onClick={closeMenu}
                   >
                     <div className="aspect-square overflow-hidden rounded-lg">
                       <img
-                        src={it.img}
-                        alt={it.label}
+                        src={`${CDN}${it.img.path}`}
+                        alt={it.name}
                         className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform"
                       />
                     </div>
-                    <div className="mt-2 text-sm text-gray-800">{it.label}</div>
+                    <div className="mt-2 text-sm text-gray-800">{it.name}</div>
                   </Link>
                 ))}
               </div>
