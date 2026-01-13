@@ -105,7 +105,7 @@ export const Account = (props) => {
   };
 
   return (
-    <div className="max-w-[1024px] mx-auto py-8 px-4">
+    <div className="max-w-[1024px] mx-auto lg:py-8 sm:py-4 px-4">
       <div>
         <h2 className="text-lg font-semibold">About You</h2>
         <div className="border rounded-lg border-gray-300 bg-white p-4 mt-2">
@@ -157,7 +157,7 @@ export const Account = (props) => {
               </span>
             </div>
           </div>
-          <div className="w-2/3">
+          <div className="lg:w-2/3">
             <BasicSelectInput
               label={"Country of residence"}
               options={[
@@ -221,7 +221,7 @@ export const Account = (props) => {
       <div className="mt-6">
         <h2 className="text-lg font-semibold">Password</h2>
         <div className="border rounded-lg border-gray-300 bg-white p-4 mt-2">
-          <div className="w-2/3">
+          <div className="lg:w-2/3">
             <BasicTextInput
               label={"Current Password"}
               placeholder={"Enter your current password"}

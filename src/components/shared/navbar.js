@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   cartIcon,
   searchIcon,
@@ -16,6 +16,7 @@ import { usePageLoading } from "../context/loading";
 import { errorToast } from "../../utils/toast";
 import { store } from "../../redux";
 import { userSignOut } from "../../redux/actions";
+import MobileMegaMenu from "./mobilemenu";
 
 /**
  * @author
@@ -29,6 +30,8 @@ export const Navbar = (props) => {
   const { setPageLoading } = usePageLoading();
 
   const auth = useSelector((state) => state.auth);
+
+  const [mobileCatOpen, setMobileCatOpen] = useState(false);
 
   const openShopManager = async () => {
     setPageLoading(true);
@@ -81,62 +84,131 @@ export const Navbar = (props) => {
     { icon: cartIcon, link: "/cart", title: "Cart" },
   ];
   return (
-    <nav className="w-full bg-primary">
-      <div className="flex items-center justify-between py-3 max-w-[1380px] mx-auto">
-        {/* Logo and Categories */}
-        <div className="flex items-center">
-          <Link to={"/"}>
-            <img src={logo_black} height={28} width={123} alt="Aleeha Logo" />
-          </Link>
-          <MegaMenu />
-        </div>
+    <>
+      <nav className="w-full bg-primary lg:block sm:hidden">
+        <div className="flex items-center justify-between py-3 max-w-[1380px] mx-auto">
+          {/* Logo and Categories */}
+          <div className="flex items-center">
+            <Link to={"/"}>
+              <img src={logo_black} height={28} width={123} alt="Aleeha Logo" />
+            </Link>
+            <MegaMenu />
+          </div>
 
-        {/* Search Bar */}
-        <div className="flex items-center w-1/2">
-          <div className="flex items-center border border-2 border-[#222222] rounded-full w-full overflow-hidden">
-            <input
-              type="text"
-              placeholder="Search for anything"
-              className="flex-grow px-4 py-3 text-gray-700 placeholder-gray-400 focus:outline-none"
-            />
-            <button className="bg-[#2F5651] transform transition-transform duration-200 hover:scale-110 p-2 rounded-full mr-1">
-              {searchIcon}
-            </button>
+          {/* Search Bar */}
+          <div className="flex items-center w-1/2">
+            <div className="flex items-center border border-2 border-[#222222] rounded-full w-full overflow-hidden">
+              <input
+                type="text"
+                placeholder="Search for anything"
+                className="flex-grow px-4 py-3 text-gray-700 placeholder-gray-400 focus:outline-none"
+              />
+              <button className="bg-[#2F5651] transform transition-transform duration-200 hover:scale-110 p-2 rounded-full mr-1">
+                {searchIcon}
+              </button>
+            </div>
+          </div>
+
+          {/* Navigation Icons */}
+          <div className="flex items-center gap-2">
+            {navIcons.map((item, index) => {
+              return (
+                <React.Fragment key={index}>
+                  {item.link ? (
+                    <Link
+                      to={item.link}
+                      title={item.title}
+                      className="mx-2 hover:bg-gray-200 px-2 py-2 rounded-full"
+                    >
+                      {item.icon}
+                    </Link>
+                  ) : item.onClick ? (
+                    <button
+                      type="button"
+                      onClick={item.onClick}
+                      title={item.title}
+                      className="mx-2 hover:bg-gray-200 px-2 py-2 rounded-full"
+                    >
+                      {item.icon}
+                    </button>
+                  ) : (
+                    <MinimalDropdown />
+                  )}
+                </React.Fragment>
+              );
+            })}
+          </div>
+        </div>
+        {/* Bottom Border */}
+        <div className="border-b border-2 border-grey-300 w-full" />
+      </nav>
+
+      <nav className="bg-white border-b lg:hidden sm:block">
+        {/* TOP BAR */}
+        <div className="flex items-center gap-3 px-4 py-3 md:max-w-[1380px] md:mx-auto">
+          {/* Logo */}
+          <Link to="/" className="mr-auto md:mr-0">
+            <img src={logo_black} className="h-7" alt="Aleeha Logo" />
+          </Link>
+
+          {/* Icons */}
+          <div className="flex items-center gap-2">
+            {navIcons.map((item, index) => {
+              return (
+                <React.Fragment key={index}>
+                  {item.link ? (
+                    <Link
+                      to={item.link}
+                      title={item.title}
+                      className="hover:bg-gray-200 p-2 rounded-full"
+                    >
+                      {item.icon}
+                    </Link>
+                  ) : item.onClick ? (
+                    <button
+                      type="button"
+                      onClick={item.onClick}
+                      title={item.title}
+                      className="mx-2 hover:bg-gray-200 px-2 py-2 rounded-full"
+                    >
+                      {item.icon}
+                    </button>
+                  ) : (
+                    <MinimalDropdown />
+                  )}
+                </React.Fragment>
+              );
+            })}
           </div>
         </div>
 
-        {/* Navigation Icons */}
-        <div className="flex items-center gap-2">
-          {navIcons.map((item, index) => {
-            return (
-              <React.Fragment key={index}>
-                {item.link ? (
-                  <Link
-                    to={item.link}
-                    title={item.title}
-                    className="mx-2 hover:bg-gray-200 px-2 py-2 rounded-full"
-                  >
-                    {item.icon}
-                  </Link>
-                ) : item.onClick ? (
-                  <button
-                    type="button"
-                    onClick={item.onClick}
-                    title={item.title}
-                    className="mx-2 hover:bg-gray-200 px-2 py-2 rounded-full"
-                  >
-                    {item.icon}
-                  </button>
-                ) : (
-                  <MinimalDropdown />
-                )}
-              </React.Fragment>
-            );
-          })}
+        {/* MOBILE SEARCH */}
+        <div className="md:hidden flex items-center gap-3 px-4 pb-3 w-full">
+          {/* Hamburger */}
+          <button
+            onClick={() => setMobileCatOpen(true)}
+            className="text-xl flex-shrink-0"
+          >
+            ☰
+          </button>
+
+          {/* Search bar */}
+          <div className="flex items-center border rounded-full px-3 flex-1">
+            <input
+              className="flex-1 py-2 outline-none bg-transparent"
+              placeholder="Search for anything"
+            />
+            {searchIcon}
+          </div>
         </div>
-      </div>
-      {/* Bottom Border */}
-      <div className="border-b border-2 border-grey-300 w-full" />
-    </nav>
+
+        {/* Mobile Bottom Sheet Categories */}
+        <MobileMegaMenu
+          mobile={true}
+          open={mobileCatOpen}
+          onClose={() => setMobileCatOpen(false)}
+        />
+      </nav>
+    </>
   );
 };

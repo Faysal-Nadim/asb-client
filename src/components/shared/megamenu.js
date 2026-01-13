@@ -6,84 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllCategories } from "../../redux/actions";
 import { CDN } from "../../redux/helpers/urlConfig";
 
-const CATEGORIES = [
-  {
-    name: "Home & Living",
-    items: [
-      {
-        label: "Women's Clothing",
-        img: "https://picsum.photos/seed/women/200",
-        link: "/c/women",
-      },
-      {
-        label: "Men's Clothing",
-        img: "https://picsum.photos/seed/men/200",
-        link: "/c/men",
-      },
-      {
-        label: "Gender-Neutral Adult",
-        img: "https://picsum.photos/seed/neutral/200",
-        link: "/c/neutral-adult",
-      },
-      {
-        label: "Indian Ethnic Clothing",
-        img: "https://picsum.photos/seed/ethnic/200",
-        link: "/c/indian",
-      },
-      {
-        label: "Girls' Clothing",
-        img: "https://picsum.photos/seed/girls/200",
-        link: "/c/girls",
-      },
-      {
-        label: "Boys' Clothing",
-        img: "https://picsum.photos/seed/boys/200",
-        link: "/c/boys",
-      },
-      {
-        label: "Gender-Neutral Kids'",
-        img: "https://picsum.photos/seed/kidsneutral/200",
-        link: "/c/kids-neutral",
-      },
-    ],
-  },
-  {
-    name: "Jewellery",
-    items: [
-      {
-        label: "Necklaces",
-        img: "https://picsum.photos/seed/necklace/200",
-        link: "/c/necklaces",
-      },
-      {
-        label: "Earrings",
-        img: "https://picsum.photos/seed/ear/200",
-        link: "/c/earrings",
-      },
-      {
-        label: "Bracelets",
-        img: "https://picsum.photos/seed/brace/200",
-        link: "/c/bracelets",
-      },
-    ],
-  },
-  {
-    name: "Clothing",
-    items: [
-      {
-        label: "Saree",
-        img: "https://picsum.photos/seed/saree/200",
-        link: "/c/saree",
-      },
-      {
-        label: "Kurta",
-        img: "https://picsum.photos/seed/kurta/200",
-        link: "/c/kurta",
-      },
-    ],
-  },
-];
-
 export default function MegaMenu() {
   const dispatch = useDispatch();
 
@@ -175,7 +97,7 @@ export default function MegaMenu() {
       e.preventDefault();
       const next =
         e.key === "ArrowDown"
-          ? Math.min(CATEGORIES.length - 1, i + 1)
+          ? Math.min(categories.length - 1, i + 1)
           : Math.max(0, i - 1);
       setActiveIndex(next);
       const nextBtn = wrapRef.current.querySelector(

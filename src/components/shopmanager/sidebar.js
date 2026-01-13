@@ -108,8 +108,10 @@ export const Sidebar = () => {
   return (
     <>
       {/* Mobile top bar with menu button */}
-      <div className="md:hidden flex items-center justify-between px-4 py-3 border-b bg-white sticky top-0 z-40">
-        <h1 className="font-semibold text-lg">My Shop</h1>
+      <div className="md:hidden flex items-center justify-between px-4 py-3 border-b bg-white sticky top-0 z-40 mt-2">
+        <h1 className="font-semibold text-lg">
+          {shopDetails?.name || "My Shop"}
+        </h1>
         <button
           onClick={() => setIsOpen(!isOpen)}
           className="p-2 rounded-md border hover:bg-gray-100"
