@@ -152,7 +152,7 @@ export const Navbar = (props) => {
           </Link>
 
           {/* Icons */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center">
             {navIcons.map((item, index) => {
               return (
                 <React.Fragment key={index}>

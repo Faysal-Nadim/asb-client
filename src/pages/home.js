@@ -15,7 +15,7 @@ export const Home = () => {
   const { pageLoading } = usePageLoading();
 
   return (
-    <div className="relative py-8 max-w-[1380px] mx-auto">
+    <div className="relative py-4 max-w-[1380px] mx-auto">
       {pageLoading && <LoadingModal text="Loading..." />}
 
       <Hero />

@@ -81,9 +81,10 @@ export const Deals = (props) => {
       behavior: "smooth",
     });
   };
+
   return (
     <div className="py-4 w-full mx-auto">
-      <div>
+      <div className="sm:mx-4 lg:mx-0 md:mx-0">
         {/* Title + buttons */}
         <div className="flex justify-between items-center">
           <h2 className="text-2xl font-semibold">Today's deals</h2>
@@ -118,13 +119,13 @@ export const Deals = (props) => {
                 <img
                   src={item.img}
                   alt={item.title}
-                  className="w-[280px] h-[280px] object-cover"
+                  className="lg:w-[280px] lg:h-[280px] sm:h-[180px]  object-cover"
                 />
               </div>
               <div className="p-4">
                 <div className="flex justify-between items-center mt-2">
                   <h3 className="text-sm font-semibold ">{item.title}</h3>
-                  <div className="flex items-center gap-1">
+                  <div className="lg:flex sm:hidden items-center gap-1">
                     <img
                       src={star}
                       alt="Rating"

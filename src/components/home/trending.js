@@ -34,21 +34,21 @@ const dummyTrendingData = [
 
 export const Trending = (props) => {
   return (
-    <div className="py-8 w-full mx-auto">
-      <div>
+    <div className="py-4 w-full mx-auto">
+      <div className="sm:mx-4 lg:mx-0 md:mx-0">
         <h2 className="text-2xl font-semibold">Explore What’s Trending</h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-2">
           {dummyTrendingData.map((item) => (
             <div
               key={item.id}
-              className="hover:bg-white border border-white hover:border-gray-100 rounded-xl hover:shadow-lg transition-shadow duration-300 p-2 cursor-pointer"
+              className="hover:bg-white border border-white lg:hover:border-gray-100 rounded-xl lg:hover:shadow-lg transition-shadow duration-300 lg:p-2 cursor-pointer"
             >
               <div className="overflow-hidden rounded-lg">
                 <img
                   src={item.img}
                   alt={item.title}
-                  className="w-full h-[380px] object-cover"
+                  className="w-full lg:h-[380px] md:h-[300px] sm:h-full object-cover"
                 />
               </div>
               <h3 className="text-lg text-center font-semibold mt-4">
