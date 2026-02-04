@@ -44,7 +44,7 @@ export const Trending = (props) => {
               key={item.id}
               className="hover:bg-white border border-white lg:hover:border-gray-100 rounded-xl lg:hover:shadow-lg transition-shadow duration-300 lg:p-2 cursor-pointer"
             >
-              <div className="overflow-hidden rounded-lg">
+              <div className="overflow-hidden rounded-lg sm:hover:shadow-md lg:hover:shadow-none transition-shadow duration-300">
                 <img
                   src={item.img}
                   alt={item.title}
