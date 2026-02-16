@@ -26,6 +26,7 @@ import { OnboardStatus } from "./pages/status/onboard";
 import { SystemLayout } from "./components/layout/system";
 import { AuthPage } from "./pages/auth";
 import { PageLoadingProvider } from "./components/context/loading";
+import { Settings } from "./pages/my-shop/settings";
 
 function App() {
   const auth = useSelector((state) => state.auth);
@@ -110,7 +111,9 @@ function App() {
             path="/my-shop/*"
             element={
               <ShopLayout>
-                <Outlet />
+                <PrivateRoute>
+                  <Outlet />
+                </PrivateRoute>
               </ShopLayout>
             }
           >
@@ -121,6 +124,7 @@ function App() {
             <Route path={"reports"} element={<Reports />} />
             <Route path={"coupons"} element={<Coupons />} />
             <Route path={"earnings"} element={<Earnings />} />
+            <Route path={"settings"} element={<Settings />} />
           </Route>
 
           <Route

@@ -45,3 +45,25 @@ export const getBasicShopDetails = () => {
     }
   };
 };
+
+export const getShopSettings = () => {
+  return async (dispatch) => {
+    dispatch({ type: shopConstants.GET_SHOP_SETTINGS_REQUEST });
+    try {
+      const res = await axiosInstance.get("/shop/services/get-settings");
+      const { shop } = res.data;
+      dispatch({
+        type: shopConstants.GET_SHOP_SETTINGS_SUCCESS,
+        payload: shop,
+      });
+    } catch (error) {
+      dispatch({
+        type: shopConstants.GET_SHOP_SETTINGS_FAILURE,
+        payload: error.response
+          ? error.response.data
+          : { error: "Network Error" },
+      });
+      errorToast(error.response ? error.response.data.msg : "Network Error");
+    }
+  };
+};
