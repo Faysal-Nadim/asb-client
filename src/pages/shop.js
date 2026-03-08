@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { searchIcon } from "../assets/SvgIcons";
 import { ShopHeader } from "../components/shop/header";
 import { Products } from "../components/shop/products";
+import { useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getShopBySlug } from "../redux/actions";
 
 /**
  * @author
@@ -11,10 +14,23 @@ import { Products } from "../components/shop/products";
 const shopNavigation = ["Products", "Reviews", "About", "Policies"];
 
 export const ShopDetails = (props) => {
+  const location = useLocation();
+  const dispatch = useDispatch();
+
+  const [country, identifier] = location.pathname.split("/").slice(2);
+
   const [activeTab, setActiveTab] = useState("Products");
+
+  const shop = useSelector((state) => state.shop);
+
+  useEffect(() => {
+    const slug = encodeURIComponent(`/${country}/${identifier}`);
+    dispatch(getShopBySlug(slug));
+  }, [country, identifier, dispatch]);
+
   return (
     <div className="max-w-[1380px] mx-auto mt-4">
-      <ShopHeader />
+      <ShopHeader shop={shop.publicShopDetails} />
       <div className="py-4 flex justify-between items-center">
         <div className="flex gap-8">
           {shopNavigation.map((tab) => {

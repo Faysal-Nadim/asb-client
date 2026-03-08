@@ -7,6 +7,7 @@ const initState = {
   loading: false,
   shopDetails: null,
   shopSettings: null,
+  publicShopDetails: null,
 };
 
 export default function shopReducer(state = initState, action) {
@@ -65,6 +66,25 @@ export default function shopReducer(state = initState, action) {
         error: null,
       };
     case shopConstants.GET_SHOP_SETTINGS_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload.error,
+      };
+
+    case shopConstants.GET_SHOP_BY_SLUG_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case shopConstants.GET_SHOP_BY_SLUG_SUCCESS:
+      return {
+        ...state,
+        publicShopDetails: action.payload,
+        loading: false,
+        error: null,
+      };
+    case shopConstants.GET_SHOP_BY_SLUG_FAILURE:
       return {
         ...state,
         loading: false,

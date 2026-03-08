@@ -10,8 +10,8 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+  font-family:
+    source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
 .hide-scrollbar {
@@ -20,4 +20,16 @@ code {
 }
 .hide-scrollbar::-webkit-scrollbar {
   display: none; /* Chrome, Safari */
+}
+
+.input {
+  @apply w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-black outline-none;
+}
+
+.btn-primary {
+  @apply px-6 py-2 bg-black text-white rounded-lg;
+}
+
+.btn-secondary {
+  @apply px-4 py-2 border rounded-lg;
 }

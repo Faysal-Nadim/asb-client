@@ -7,12 +7,21 @@ import { chatIcon, wishListIcon } from "../../assets/SvgIcons";
  * @function ShopHeader
  **/
 
-export const ShopHeader = (props) => {
+export const ShopHeader = ({ shop }) => {
+  const getCountryName = (code) => {
+    if (!code) return null;
+    const regionNames = new Intl.DisplayNames(["en"], { type: "region" });
+    return regionNames.of(code);
+  };
+
   return (
     <div className="space-y-4">
       <div>
         <img
-          src="https://i.etsystatic.com/21008709/r/isbl/cf4c6f/75928563/isbl_3360x840.75928563_oioxhg7x.jpg"
+          src={
+            shop?.shopBanner ||
+            "https://i.etsystatic.com/21008709/r/isbl/cf4c6f/75928563/isbl_3360x840.75928563_oioxhg7x.jpg"
+          }
           alt="Shop"
           className="w-full h-[440px] object-cover rounded-lg"
         />
@@ -22,14 +31,19 @@ export const ShopHeader = (props) => {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <img
-              src="https://i.etsystatic.com/21008709/r/isla/d15f45/64075550/isla_100x100.64075550_t9opw4pa.jpg"
+              src={
+                shop?.shopLogo ||
+                "https://i.etsystatic.com/21008709/r/isla/d15f45/64075550/isla_100x100.64075550_t9opw4pa.jpg"
+              }
               alt="Shop Logo"
               className="w-[88px] h-[88px] rounded-lg"
             />
             <div>
-              <h2 className="text-2xl font-bold">LamariiJewelry</h2>
+              <h2 className="text-2xl font-bold">
+                {shop?.name || "LamariiJewelry"}
+              </h2>
               <p className="text-gray-600 text-sm">
-                Artisan from Poltava, Ukraine
+                {getCountryName(shop?.shopCountry) || "Poltava, Ukraine"}
               </p>
 
               <div className="flex items-center gap-4 mt-2 text-xl">

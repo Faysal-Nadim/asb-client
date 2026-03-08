@@ -1,5 +1,6 @@
 // components/shopmanager/SellerProductsPage.jsx
 import React, { useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 
 const PAGE_SIZE = 8;
 
@@ -303,6 +304,8 @@ const statusClasses = {
 };
 
 export const Products = () => {
+  const navigate = useNavigate();
+
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
 
@@ -314,13 +317,13 @@ export const Products = () => {
       (p) =>
         p.name.toLowerCase().includes(term) ||
         p.sku.toLowerCase().includes(term) ||
-        p.category.toLowerCase().includes(term)
+        p.category.toLowerCase().includes(term),
     );
   }, [search]);
 
   const totalPages = Math.max(
     1,
-    Math.ceil(filteredProducts.length / PAGE_SIZE)
+    Math.ceil(filteredProducts.length / PAGE_SIZE),
   );
 
   const currentProducts = useMemo(() => {
@@ -361,7 +364,8 @@ export const Products = () => {
           />
           <button
             type="button"
-            className="inline-flex items-center justify-center rounded-lg bg-[#2F5651] px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700"
+            className="inline-flex items-center justify-center rounded-lg bg-[#2F5651] px-4 py-2 text-sm font-medium text-white hover:bg-[#4E948B]"
+            onClick={() => navigate("/my-shop/products/add-new")}
           >
             + Add Product
           </button>

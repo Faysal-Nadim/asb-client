@@ -27,6 +27,7 @@ import { SystemLayout } from "./components/layout/system";
 import { AuthPage } from "./pages/auth";
 import { PageLoadingProvider } from "./components/context/loading";
 import { Settings } from "./pages/my-shop/settings";
+import { AddProduct } from "./pages/my-shop/addproduct";
 
 function App() {
   const auth = useSelector((state) => state.auth);
@@ -120,6 +121,7 @@ function App() {
             <Route index element={<Dashboard />} />
             <Route path={"dashboard"} element={<Dashboard />} />
             <Route path={"products"} element={<Products />} />
+            <Route path={"products/add-new"} element={<AddProduct />} />
             <Route path={"orders"} element={<Orders />} />
             <Route path={"reports"} element={<Reports />} />
             <Route path={"coupons"} element={<Coupons />} />
@@ -128,7 +130,7 @@ function App() {
           </Route>
 
           <Route
-            path="/shop/:permalink"
+            path="/shop/:country/:indentifier"
             element={
               <GlobalLayout>
                 <ShopDetails />
