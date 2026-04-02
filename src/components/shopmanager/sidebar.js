@@ -14,6 +14,7 @@ import {
 import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getBasicShopDetails } from "../../redux/actions";
+import { CDN } from "../../redux/helpers/urlConfig";
 
 /**
  * @author
@@ -146,8 +147,12 @@ export const Sidebar = () => {
           {/* Logo / header */}
           <div className="px-4 py-4 md:flex md:items-center gap-3 border-b hidden md:block">
             <img
-              src="https://aleeha-test.s3.ap-southeast-1.amazonaws.com/rr-2.png"
-              alt="Retro Revive Logo"
+              src={
+                shopDetails?.shopLogo?.path
+                  ? `${CDN}${shopDetails.shopLogo.path}`
+                  : "https://placehold.co/200x200"
+              }
+              alt="Shop Logo"
               className="rounded-full w-12 h-12 object-contain border"
             />
             <div>

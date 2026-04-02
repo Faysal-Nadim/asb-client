@@ -2,54 +2,79 @@ import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import axiosInstance from "../../redux/helpers/axios";
 import axios from "axios";
-import { getUserByToken } from "../../redux/actions";
+import { getShopSettings } from "../../redux/actions";
 import { successToast } from "../../utils/toast";
 
-export const ProfileImgModal = ({ isOpen, onClose }) => {
+export const ShopImgModal = ({ isOpen, onClose }) => {
   const dispatch = useDispatch();
 
-  const [profileImg, setProfileImg] = useState(null);
+  const [shopImg, setShopImg] = useState(null);
   const [previewImg, setPreviewImg] = useState(null);
   const [uploading, setUploading] = useState(false);
 
-  const handlePreviewImg = (e) => {
+  const handlePreviewImg = async (e) => {
     const file = e.target.files[0];
-    setProfileImg(file);
-    setPreviewImg(URL.createObjectURL(file));
+
+    const { width, height } = await getImageDimensions(file);
+
+    if (width === 200 && height === 200) {
+      setShopImg(file);
+      setPreviewImg(URL.createObjectURL(file));
+    } else {
+      console.log("Not 200x200, need to crop");
+    }
   };
 
-  const handleProfileImgUpload = async () => {
-    if (!profileImg) return;
+  const getImageDimensions = (file) => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      const objectUrl = URL.createObjectURL(file);
+
+      img.onload = () => {
+        resolve({
+          width: img.width,
+          height: img.height,
+        });
+        URL.revokeObjectURL(objectUrl);
+      };
+
+      img.onerror = reject;
+      img.src = objectUrl;
+    });
+  };
+
+  const handleShopImgUpload = async () => {
+    if (!shopImg) return;
     setUploading(true);
     try {
       const res = await axiosInstance.get(
-        `/user/services/get-presigned-url?fileName=${profileImg.name}&contentType=${profileImg.type}&reqType=profileImage`,
+        `/shop/services/get-presigned-url?fileName=${shopImg.name}&contentType=${shopImg.type}`,
       );
 
       const { uploadUrl, key, path } = res.data;
 
-      await axios.put(uploadUrl, profileImg, {
+      await axios.put(uploadUrl, shopImg, {
         headers: {
-          "Content-Type": profileImg.type,
+          "Content-Type": shopImg.type,
           "Cache-Control": "public, max-age=31536000, immutable",
         },
       });
 
-      await axiosInstance.post("/user/services/update-profile-image", {
+      await axiosInstance.post("/shop/services/update-shop-logo", {
         key,
         path,
       });
-      successToast("Profile image updated successfully.");
+      successToast("Shop logo updated successfully.");
 
-      dispatch(getUserByToken());
+      dispatch(getShopSettings());
 
       setUploading(false);
       onClose();
 
       setPreviewImg(null);
-      setProfileImg(null);
+      setShopImg(null);
     } catch (error) {
-      console.error("Error uploading profile image:", error);
+      console.error("Error uploading shop logo:", error);
     } finally {
       setUploading(false);
     }
@@ -68,7 +93,7 @@ export const ProfileImgModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-30 flex items-center justify-center">
       {/* Overlay */}
       <div className="absolute inset-0 bg-black/40" onClick={onClose} />
 
@@ -76,14 +101,18 @@ export const ProfileImgModal = ({ isOpen, onClose }) => {
       <div className="relative z-10 w-full max-w-md mx-4">
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
           <div className="p-6">
-            <h2 className="text-lg font-semibold mb-4">Update Profile Image</h2>
-            <p className="text-sm text-gray-600 mb-6">
-              Choose a new profile image to upload. Supported formats are JPG,
-              PNG, and GIF.
+            <h2 className="text-lg font-semibold mb-2">Update Shop Logo</h2>
+            <p className="text-sm text-red-600 ">
+              Use a square image with dimensions of 200x200 pixels.
             </p>
-            {/* Profile image upload form goes here */}
+            <p className="text-sm text-gray-600 mb-6">
+              Choose a new shop logo to upload. Supported formats are JPG, PNG,
+              and GIF.
+            </p>
+
+            {/* Shop logo upload form goes here */}
             <div className="flex flex-col items-center">
-              <label htmlFor="profileImage" className="cursor-pointer mb-4">
+              <label htmlFor="shopImage" className="cursor-pointer mb-4">
                 {previewImg ? (
                   <img
                     src={previewImg}
@@ -98,7 +127,7 @@ export const ProfileImgModal = ({ isOpen, onClose }) => {
               </label>
 
               <input
-                id="profileImage"
+                id="shopImage"
                 type="file"
                 accept="image/*"
                 onChange={handlePreviewImg}
@@ -108,11 +137,11 @@ export const ProfileImgModal = ({ isOpen, onClose }) => {
               <button
                 className="bg-[#2F5651] text-white px-8 py-2 rounded hover:bg-[#24443F] transition"
                 onClick={() => {
-                  handleProfileImgUpload();
+                  handleShopImgUpload();
                 }}
-                disabled={!profileImg || uploading}
+                disabled={!shopImg || uploading}
               >
-                {uploading ? "Uploading..." : "Update Image"}
+                {uploading ? "Uploading..." : "Update Logo"}
               </button>
             </div>
           </div>

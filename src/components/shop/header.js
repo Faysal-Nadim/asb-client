@@ -1,6 +1,7 @@
 import React from "react";
 import { star } from "../../assets/svg";
 import { chatIcon, wishListIcon } from "../../assets/SvgIcons";
+import { CDN } from "../../redux/helpers/urlConfig";
 
 /**
  * @author
@@ -19,8 +20,9 @@ export const ShopHeader = ({ shop }) => {
       <div>
         <img
           src={
-            shop?.shopBanner ||
-            "https://i.etsystatic.com/21008709/r/isbl/cf4c6f/75928563/isbl_3360x840.75928563_oioxhg7x.jpg"
+            shop?.shopBanner?.path
+              ? `${CDN}${shop.shopBanner.path}`
+              : "https://placehold.co/1380x440"
           }
           alt="Shop"
           className="w-full h-[440px] object-cover rounded-lg"
@@ -32,8 +34,9 @@ export const ShopHeader = ({ shop }) => {
           <div className="flex items-center gap-4">
             <img
               src={
-                shop?.shopLogo ||
-                "https://i.etsystatic.com/21008709/r/isla/d15f45/64075550/isla_100x100.64075550_t9opw4pa.jpg"
+                shop?.shopLogo?.path
+                  ? `${CDN}${shop.shopLogo.path}`
+                  : "https://placehold.co/200x200"
               }
               alt="Shop Logo"
               className="w-[88px] h-[88px] rounded-lg"

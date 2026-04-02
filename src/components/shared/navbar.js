@@ -39,8 +39,8 @@ export const Navbar = (props) => {
       if (!auth?.authenticate) {
         navigate(
           `/user/auth?tab=login&redirect=${encodeURIComponent(
-            "/merchant/onboarding"
-          )}`
+            "/merchant/onboarding",
+          )}`,
         );
         return;
       }
@@ -63,13 +63,13 @@ export const Navbar = (props) => {
         navigate("/merchant/onboarding?step=0");
       } else {
         errorToast(
-          data?.msg || "Could not open Shop Manager. Please try again later."
+          data?.msg || "Could not open Shop Manager. Please try again later.",
         );
         dispatch(userSignOut());
         navigate(
           `/user/auth?tab=login&redirect=${encodeURIComponent(
-            "/merchant/onboarding"
-          )}`
+            "/merchant/onboarding",
+          )}`,
         );
       }
     } finally {
