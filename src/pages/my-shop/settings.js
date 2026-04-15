@@ -45,7 +45,7 @@ export const Settings = (props) => {
         )}
         <div
           onClick={() => setShopBannerModal(true)}
-          className="absolute bottom-2 right-2 bg-black bg-opacity-70 p-2 rounded-full cursor-pointer"
+          className="absolute lg:block sm:hidden bottom-2 right-2 bg-black bg-opacity-70 p-2 rounded-full cursor-pointer"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -87,7 +87,7 @@ export const Settings = (props) => {
 
             <div
               onClick={() => setShopImgModal(true)}
-              className="absolute z-10 bottom-0 right-0 bg-black bg-opacity-70 p-2 rounded-full cursor-pointer"
+              className="absolute lg:block sm:hidden z-10 bottom-0 right-0 bg-black bg-opacity-70 p-2 rounded-full cursor-pointer"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -144,7 +144,7 @@ export const Settings = (props) => {
       </div>
 
       {/* Owner Info */}
-      <div className="bg-white p-4 rounded-xl shadow">
+      <div className="bg-white p-4 rounded-xl shadow mb-6">
         <Section
           title="Owner Information"
           status={
@@ -165,6 +165,27 @@ export const Settings = (props) => {
           <Info
             label="Address"
             value={`${shop?.shopSettings?.ownerInfo?.street}, ${shop?.shopSettings?.ownerInfo?.city}, ${shop?.shopSettings?.ownerInfo?.country} ${shop?.shopSettings?.ownerInfo?.zip}`}
+          />
+        </Section>
+      </div>
+
+      <div className="bg-white p-4 rounded-xl shadow">
+        <Section title="Commission">
+          <Info
+            label="Platform Fee"
+            value={shop?.shopSettings?.commission?.platform + " %"}
+          />
+          <Info
+            label="Payment Processing Fee"
+            value={shop?.shopSettings?.commission?.payment + " %"}
+          />
+          <Info
+            label="Shipping & Handling Fee"
+            value={shop?.shopSettings?.commission?.handling + " %"}
+          />
+          <Info
+            label="Shop Payout Fee"
+            value={shop?.shopSettings?.commission?.payout + " %"}
           />
         </Section>
       </div>
