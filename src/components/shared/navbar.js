@@ -2,20 +2,13 @@ import React, { useState } from "react";
 import {
   cartIcon,
   searchIcon,
-  shopIcon,
   userIcon,
   wishListIcon,
 } from "../../assets/SvgIcons";
-import { Link, useNavigate } from "react-router-dom";
-import { logo_black } from "../../assets";
+import { Link } from "react-router-dom";
+import { asb_logo_svg } from "../../assets";
 import MegaMenu from "./megamenu";
 import MinimalDropdown from "./profiledropdown";
-import axiosInstance from "../../redux/helpers/axios";
-import { useSelector } from "react-redux";
-import { usePageLoading } from "../context/loading";
-import { errorToast } from "../../utils/toast";
-import { store } from "../../redux";
-import { userSignOut } from "../../redux/actions";
 import MobileMegaMenu from "./mobilemenu";
 
 /**
@@ -24,73 +17,26 @@ import MobileMegaMenu from "./mobilemenu";
  **/
 
 export const Navbar = (props) => {
-  const navigate = useNavigate();
-  const dispatch = store.dispatch;
-
-  const { setPageLoading } = usePageLoading();
-
-  const auth = useSelector((state) => state.auth);
-
   const [mobileCatOpen, setMobileCatOpen] = useState(false);
-
-  const openShopManager = async () => {
-    setPageLoading(true);
-    try {
-      if (!auth?.authenticate) {
-        navigate(
-          `/user/auth?tab=login&redirect=${encodeURIComponent(
-            "/merchant/onboarding",
-          )}`,
-        );
-        return;
-      }
-      const res = await axiosInstance.get(`/user/services/validate-shop`);
-      if (res.status === 200) {
-        const { hasActiveShop, shopStatus, shop } = res.data;
-        if (hasActiveShop && shopStatus === "ACTIVE") {
-          navigate("/my-shop/dashboard");
-        } else if (!hasActiveShop && shopStatus !== "ACTIVE") {
-          navigate("/merchant/onboarding/status", {
-            state: { shopStatus, shop },
-          });
-        } else {
-          navigate("/merchant/onboarding?step=0");
-        }
-      }
-    } catch (error) {
-      const data = error?.response?.data;
-      if (data?.error === "SHOP_NOT_FOUND") {
-        navigate("/merchant/onboarding?step=0");
-      } else {
-        errorToast(
-          data?.msg || "Could not open Shop Manager. Please try again later.",
-        );
-        dispatch(userSignOut());
-        navigate(
-          `/user/auth?tab=login&redirect=${encodeURIComponent(
-            "/merchant/onboarding",
-          )}`,
-        );
-      }
-    } finally {
-      setPageLoading(false);
-    }
-  };
 
   const navIcons = [
     { icon: wishListIcon, link: "/wishlist", title: "Wishlist" },
-    { icon: shopIcon, onClick: openShopManager, title: "Shop Manager" },
-    { icon: userIcon, link: "", title: "Your Account" },
     { icon: cartIcon, link: "/cart", title: "Cart" },
+    { icon: userIcon, link: "", title: "Your Account" },
   ];
   return (
     <>
       <nav className="w-full bg-primary lg:block sm:hidden">
-        <div className="flex items-center justify-between py-3 max-w-[1380px] mx-auto">
+        <div className="flex items-center justify-between py-2 max-w-[1380px] mx-auto">
           {/* Logo and Categories */}
           <div className="flex items-center">
             <Link to={"/"}>
-              <img src={logo_black} height={28} width={123} alt="Aleeha Logo" />
+              <img
+                src={asb_logo_svg}
+                // height={28}
+                width={100}
+                alt="Ali Store BD Logo"
+              />
             </Link>
             <MegaMenu />
           </div>
@@ -110,7 +56,7 @@ export const Navbar = (props) => {
           </div>
 
           {/* Navigation Icons */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center">
             {navIcons.map((item, index) => {
               return (
                 <React.Fragment key={index}>
@@ -122,15 +68,6 @@ export const Navbar = (props) => {
                     >
                       {item.icon}
                     </Link>
-                  ) : item.onClick ? (
-                    <button
-                      type="button"
-                      onClick={item.onClick}
-                      title={item.title}
-                      className="mx-2 hover:bg-gray-200 px-2 py-2 rounded-full"
-                    >
-                      {item.icon}
-                    </button>
                   ) : (
                     <MinimalDropdown />
                   )}
@@ -145,10 +82,10 @@ export const Navbar = (props) => {
 
       <nav className="bg-white border-b lg:hidden sm:block">
         {/* TOP BAR */}
-        <div className="flex items-center gap-3 px-4 py-3 md:max-w-[1380px] md:mx-auto">
+        <div className="flex items-center gap-3 px-4  md:max-w-[1380px] md:mx-auto">
           {/* Logo */}
-          <Link to="/" className="mr-auto md:mr-0">
-            <img src={logo_black} className="h-7" alt="Aleeha Logo" />
+          <Link to="/" className="mr-auto md:mr-0 py-2">
+            <img src={asb_logo_svg} width={100} alt="Ali Store BD Logo" />
           </Link>
 
           {/* Icons */}

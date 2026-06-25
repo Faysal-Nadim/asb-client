@@ -1,6 +1,6 @@
 {
-  "short_name": "Aleeha",
-  "name": "Aleeha",
+  "short_name": "Ali Store BD",
+  "name": "Ali Store BD",
   "icons": [
     {
       "src": "favicon.ico",
@@ -8,13 +8,13 @@
       "type": "image/x-icon"
     },
     {
-      "src": "/web-app-manifest-192x192.png",
+      "src": "/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "/web-app-manifest-512x512.png",
+      "src": "/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"

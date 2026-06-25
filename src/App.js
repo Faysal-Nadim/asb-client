@@ -28,6 +28,7 @@ import { AuthPage } from "./pages/auth";
 import { PageLoadingProvider } from "./components/context/loading";
 import { Settings } from "./pages/my-shop/settings";
 import { AddProduct } from "./pages/my-shop/addproduct";
+import { Verification } from "./pages/verification";
 
 function App() {
   const auth = useSelector((state) => state.auth);
@@ -57,6 +58,15 @@ function App() {
             element={
               <SystemLayout type={"Authentication"}>
                 <AuthPage />
+              </SystemLayout>
+            }
+          />
+
+          <Route
+            path="/user/auth/verify-email"
+            element={
+              <SystemLayout type={"Authentication"}>
+                <Verification />
               </SystemLayout>
             }
           />

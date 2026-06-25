@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { logo_black } from "../../assets";
+import { asb_logo_svg } from "../../assets";
 
 /**
  * @author
@@ -10,11 +10,11 @@ import { logo_black } from "../../assets";
 export const SystemNav = ({ type }) => {
   return (
     <nav className="w-full bg-primary">
-      <div className="flex items-center justify-between py-6 max-w-[1380px] mx-auto">
+      <div className="flex items-center justify-between py-2 max-w-[1380px] mx-auto">
         {/* Logo and Categories */}
-        <div className="flex items-center justify-between w-full px-4">
+        <div className="flex items-center justify-between lg:px-0 md:px-4 sm:px-4 w-full">
           <Link to={"/"}>
-            <img src={logo_black} height={28} width={123} alt="Aleeha Logo" />
+            <img src={asb_logo_svg} width={100} alt="Ali Store BD Logo" />
           </Link>
           <h2 className="text-lg font-semibold">{type}</h2>
         </div>

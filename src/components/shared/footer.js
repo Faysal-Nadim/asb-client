@@ -1,7 +1,7 @@
 import React from "react";
 import { fb, ig } from "../../assets/svg";
 import { Link } from "react-router-dom";
-import { logo_black } from "../../assets";
+import { asb_logo_svg } from "../../assets";
 
 const links = [
   { text: "Privacy Policy", url: "/privacy-policy" },
@@ -113,15 +113,14 @@ export const Footer = (props) => {
       >
         <div className="lg:hidden md:hidden sm:flex flex-col justify-center items-center col-span-1 space-y-4 mb-4">
           <img
-            src={logo_black}
-            height={56}
-            width={246}
-            alt="Aleeha Logo"
+            src={asb_logo_svg}
+            width={128}
+            alt="Ali Store BD Logo"
             className="mb-4"
           />
 
           <p className="text-[14px] text-center text-black">
-            At Aleeha, we curate authentic, artisan-made pieces rooted in
+            At Ali Store BD, we curate authentic, artisan-made pieces rooted in
             tradition and elevated by design. Every product tells a story worth
             sharing.
           </p>
@@ -129,18 +128,17 @@ export const Footer = (props) => {
         <div className="grid lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-2 lg:gap-16 md:gap-12 sm:gap-8">
           {/* <div className="bg-[#CCEBFF] rounded"></div> */}
 
-          <div className="lg:block md:block sm:hidden col-span-1 space-y-4 mb-4">
+          <div className="lg:flex md:flex sm:hidden flex-col col-span-1 space-y-4 mb-4 justify-center items-center">
             <img
-              src={logo_black}
-              height={56}
-              width={246}
-              alt="Aleeha Logo"
+              src={asb_logo_svg}
+              width={128}
+              alt="Ali Store BD Logo"
               className="mb-4"
             />
 
             <p className="text-[14px] text-center text-black">
-              At Aleeha, we curate authentic, artisan-made pieces rooted in
-              tradition and elevated by design. Every product tells a story
+              At Ali Store BD, we curate authentic, artisan-made pieces rooted
+              in tradition and elevated by design. Every product tells a story
               worth sharing.
             </p>
           </div>
@@ -193,7 +191,7 @@ export const Footer = (props) => {
         <div className="flex max-w-[1380px] mx-auto justify-between w-full lg:flex-row md:flex-row sm:flex-col gap-8 lg:items-center md:items-center sm:items-center py-6">
           <div>
             <p className="text-sm text-white">
-              © {new Date().getFullYear()} Aleeha. All rights reserved.
+              © {new Date().getFullYear()} Ali Store BD. All rights reserved.
             </p>
           </div>
           <div className="flex text-white lg:flex-row md:flex-row sm:flex-row gap-4 lg:text-sm md:text-sm sm:text-xs">

@@ -80,7 +80,7 @@ export default function MinimalDropdown({ children }) {
             setAuthTab("login");
             setAuthOpen(true);
           }}
-          className="mx-2 hover:bg-gray-200 px-2 py-2 rounded-full cursor-pointer"
+          className="hover:bg-gray-200 px-2 py-2 rounded-full cursor-pointer"
         >
           {userIcon}
         </div>

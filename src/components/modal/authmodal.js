@@ -98,6 +98,7 @@ const LoginForm = ({ dispatch }) => {
     e.preventDefault();
     dispatch(userLoginWithEmail({ email, password }));
   };
+
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>

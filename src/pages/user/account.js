@@ -150,11 +150,6 @@ export const Account = (props) => {
             <div>
               <h2 className="text-lg font-semibold mt-2">{auth?.user?.name}</h2>
               <p className="text-gray-600 text-sm">{auth?.user?.email}</p>
-              <span className="text-gray-600 text-sm font-mono">
-                ID# {auth?.user?.memberId.slice(0, 3)}{" "}
-                {auth?.user?.memberId.slice(3, 6)}{" "}
-                {auth?.user?.memberId.slice(6)}
-              </span>
             </div>
           </div>
           <div className="lg:w-2/3">

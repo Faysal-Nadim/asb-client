@@ -21,6 +21,13 @@ export const userRegistrationWithEmail = (user) => {
         type: authConstants.USER_REGISTER_FAILURE,
         payload: { error: error?.response?.data },
       });
+      if (
+        error?.response?.data?.error === "EMAIL_IN_USE" &&
+        error?.response?.status === 403
+      ) {
+        window.location.href =
+          "/user/auth/verify-email?email=" + encodeURIComponent(user.email);
+      }
     }
   };
 };
@@ -46,6 +53,11 @@ export const userLoginWithEmail = (user) => {
         type: authConstants.USER_LOGIN_FAILURE,
         payload: { error: error?.response?.data },
       });
+
+      if (error?.response?.status === 403) {
+        window.location.href =
+          "/user/auth/verify-email?email=" + encodeURIComponent(user.email);
+      }
     }
   };
 };
@@ -67,6 +79,61 @@ export const isUserLoggedIn = () => {
       dispatch({
         type: authConstants.USER_LOGIN_FAILURE,
         payload: { error: "Failed to login!" },
+      });
+    }
+  };
+};
+
+export const sendOtp = (email) => {
+  return async (dispatch) => {
+    dispatch({ type: authConstants.OTP_SEND_REQUEST });
+    try {
+      const res = await axiosInstance.post("/auth/user/verification/send-otp", {
+        email,
+      });
+      if (res.status === 200) {
+        const { msg } = res.data;
+        dispatch({
+          type: authConstants.OTP_SEND_SUCCESS,
+          payload: { msg: msg },
+        });
+        successToast(msg);
+      }
+    } catch (error) {
+      errorToast(error?.response?.data?.msg || "Failed to send OTP");
+      dispatch({
+        type: authConstants.OTP_SEND_FAILURE,
+        payload: { error: error?.response?.data },
+      });
+    }
+  };
+};
+
+export const verifyUserEmail = (email, otp) => {
+  return async (dispatch) => {
+    dispatch({ type: authConstants.EMAIL_VERIFICATION_REQUEST });
+    try {
+      const res = await axiosInstance.post(
+        "/auth/user/verification/verify-otp",
+        {
+          email,
+          otp,
+        },
+      );
+      if (res.status === 200) {
+        const { msg } = res.data;
+        dispatch({
+          type: authConstants.EMAIL_VERIFICATION_SUCCESS,
+          payload: { msg: msg },
+        });
+        successToast(msg);
+        window.location.href = "/user/auth";
+      }
+    } catch (error) {
+      errorToast(error?.response?.data?.msg || "Email verification failed");
+      dispatch({
+        type: authConstants.EMAIL_VERIFICATION_FAILURE,
+        payload: { error: error?.response?.data },
       });
     }
   };
@@ -125,7 +192,7 @@ export const updateUserProfile = (userData) => {
     try {
       const res = await axiosInstance.post(
         "/user/services/update-user-profile",
-        userData
+        userData,
       );
       if (res.status === 200) {
         const { msg } = res.data;
@@ -151,7 +218,7 @@ export const changeUserPassword = (passwordData) => {
     try {
       const res = await axiosInstance.post(
         "/user/services/change-password",
-        passwordData
+        passwordData,
       );
       if (res.status === 200) {
         const { msg } = res.data;
