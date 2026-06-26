@@ -1,16 +1,9 @@
 // Dashboard.jsx
 import React, { useEffect } from "react";
-import {
-  bdtIcon,
-  euroIcon,
-  oordersIcon,
-  poundIcon,
-  usdIcon,
-} from "../../assets/SvgIcons";
-import { RecentOrdersTable } from "../../components/shopmanager/recentorders";
-import { SellerOverviewSection } from "../../components/shopmanager/selleroverview";
-import { StatsSection } from "../../components/shopmanager/stats";
-import { useSelector } from "react-redux";
+import { bdtIcon, ordersIcon } from "../../assets/SvgIcons";
+import { RecentOrdersTable } from "../../components/usermanager/recentorders";
+import { SellerOverviewSection } from "../../components/usermanager/selleroverview";
+import { StatsSection } from "../../components/usermanager/stats";
 
 const demoOrders = [
   {
@@ -71,8 +64,6 @@ const demoOrders = [
 ];
 
 export const Dashboard = () => {
-  const { shopDetails } = useSelector((state) => state.shop);
-
   useEffect(() => {
     document.title = "Dashboard - My Shop | Aleeha";
   }, []);
@@ -85,14 +76,7 @@ export const Dashboard = () => {
       badge: "+3.15%",
       badgeColor: "bg-emerald-100 text-emerald-600",
       iconBg: "bg-orange-100",
-      iconText:
-        shopDetails?.shopCurr === "BDT"
-          ? bdtIcon
-          : shopDetails?.shopCurr === "USD"
-          ? usdIcon
-          : shopDetails?.shopCurr === "EUR"
-          ? euroIcon
-          : poundIcon,
+      iconText: bdtIcon,
     },
     {
       label: "Total Orders",
@@ -101,7 +85,7 @@ export const Dashboard = () => {
       badge: "+9.75%",
       badgeColor: "bg-emerald-100 text-emerald-600",
       iconBg: "bg-sky-100",
-      iconText: oordersIcon,
+      iconText: ordersIcon,
     },
   ];
 

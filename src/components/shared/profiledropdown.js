@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
+  dashboardIconSmall,
   logOutIconSmall,
   messageIconSmall,
   orderIconSmall,
   settingsIconSmall,
   userIcon,
-  userIconSmall,
 } from "../../assets/SvgIcons";
 import { Link } from "react-router-dom";
 import { AuthModal } from "../modal/authmodal";
@@ -15,7 +15,7 @@ import { CDN } from "../../redux/helpers/urlConfig";
 // removed lucide-react to keep it plain JS (no extra deps)
 
 const profileLinks = [
-  { icon: userIconSmall, label: "My Account", link: "/user/account" },
+  { icon: dashboardIconSmall, label: "Dashboard", link: "/user/dashboard" },
   { icon: orderIconSmall, label: "Orders", link: "/user/orders" },
   { icon: messageIconSmall, label: "Messages", link: "/user/messages" },
   { icon: settingsIconSmall, label: "Settings", link: "/user/settings" },

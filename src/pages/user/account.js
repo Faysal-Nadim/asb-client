@@ -25,7 +25,6 @@ export const Account = (props) => {
   const [gender, setGender] = useState(user?.gender || "");
   const [dob, setDob] = useState({ day: "", month: "", year: "" });
   const [country, setCountry] = useState(user?.country || "");
-  const [bio, setBio] = useState(user?.bio || "");
   const [buttonStatus, setButtonStatus] = useState(true);
 
   const [currentPassword, setCurrentPassword] = useState("");
@@ -67,7 +66,6 @@ export const Account = (props) => {
       name === user?.name &&
       gender === user?.gender &&
       country === user?.country &&
-      bio === user?.bio &&
       dob.day === String(new Date(user?.birthday).getDate()) &&
       dob.month ===
         String(new Date(user?.birthday).getMonth() + 1).padStart(2, "0") &&
@@ -77,7 +75,7 @@ export const Account = (props) => {
     } else {
       setButtonStatus(false);
     }
-  }, [name, gender, country, bio, dob, user]);
+  }, [name, gender, country, dob, user]);
 
   // Handle profile update submission
   const handleProfileUpdate = (e) => {
@@ -90,7 +88,6 @@ export const Account = (props) => {
           ? `${dob.year}-${dob.month}-${dob.day}`
           : null,
       country,
-      bio,
     };
     dispatch(updateUserProfile(data));
   };
@@ -105,10 +102,10 @@ export const Account = (props) => {
   };
 
   return (
-    <div className="max-w-[1024px] mx-auto lg:py-8 sm:py-4 px-4">
+    <div className="max-w-[1380px] mx-auto lg:py-4 sm:pb-4 space-y-4">
       <div>
-        <h2 className="text-lg font-semibold">About You</h2>
-        <div className="border rounded-lg border-gray-300 bg-white p-4 mt-2">
+        <div className="border rounded-lg border-gray-300 bg-white p-4">
+          <h2 className="text-lg font-semibold">About You</h2>
           <div className="flex items-center gap-4 my-4">
             <div className="relative h-24 w-24">
               {auth?.user?.img ? (
@@ -153,6 +150,14 @@ export const Account = (props) => {
             </div>
           </div>
           <div className="lg:w-2/3">
+            <BasicTextInput
+              label={"Full name"}
+              placeholder={"Enter your full name"}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              disabled={true}
+            />
+
             <BasicSelectInput
               label={"Country of residence"}
               options={[
@@ -164,13 +169,6 @@ export const Account = (props) => {
               ]}
               value={country}
               onChange={(e) => setCountry(e.target.value)}
-            />
-
-            <BasicTextInput
-              label={"Full name"}
-              placeholder={"Enter your full name"}
-              value={name}
-              onChange={(e) => setName(e.target.value)}
             />
 
             <BasicSelectInput
@@ -187,18 +185,6 @@ export const Account = (props) => {
               endYear={new Date().getFullYear()}
               error={null}
             />
-
-            <div className="mt-2">
-              <label className="text-black font-semibold text-md mb-2 block">
-                Short bio
-              </label>
-              <textarea
-                placeholder={"Tell us about yourself"}
-                className="w-full border border-gray-300 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                value={bio}
-                onChange={(e) => setBio(e.target.value)}
-              />
-            </div>
           </div>
 
           <div className="flex justify-start mt-2">

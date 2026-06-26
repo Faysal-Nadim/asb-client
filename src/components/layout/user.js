@@ -1,24 +1,25 @@
+// components/layout/shopmanager.js
 import React from "react";
 import { Navbar } from "../shared/navbar";
+import { Sidebar } from "../usermanager/sidebar";
 import { Footer } from "../shared/footer";
-import { UserProfileNavbar } from "../shared/userprofilenav";
 
-const UserProfileLayout = ({ children }) => {
+export const UserLayout = (props) => {
   return (
     <div className="bg-[#f8f8f8] min-h-screen">
-      {/* 1440 */}
       <Navbar />
 
-      <div className="mx-auto max-w-[1380px] lg:px-2 md:px-4 sm:px-4 flex gap-6 items-start">
-        <div className="lg:w-3/12 md:w-5/12 sm:w-0 lg:block md:block sm:hidden">
-          <UserProfileNavbar />
+      <div className="mx-auto max-w-[1380px] lg:px-2 md:px-4 sm:px-4 flex flex-col md:flex-row lg:gap-6 sm:gap-4 items-start">
+        {/* Sidebar: visible on all screens, layout changes with breakpoints */}
+        <div className=" w-full md:w-5/12 lg:w-2/12 lg:sticky top-2 self-start">
+          <Sidebar />
         </div>
-        <div className="lg:w-9/12 md:w-7/12 sm:w-full">{children}</div>
+
+        {/* Main content */}
+        <div className="w-full md:w-7/12 lg:w-10/12">{props.children}</div>
       </div>
-      {/* 1440 */}
+
       <Footer />
     </div>
   );
 };
-
-export default UserProfileLayout;
