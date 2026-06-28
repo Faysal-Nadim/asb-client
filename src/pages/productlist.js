@@ -39,6 +39,11 @@ export const ProductList = (props) => {
     }
   }, [dispatch, params]);
 
+  function getAliCdnUrl(url) {
+    const filename = url.split("/").pop().split("?")[0];
+    return `https://img.alicdn.com/${filename}`;
+  }
+
   return (
     <div className="py-8 max-w-[1380px] mx-auto px-4 sm:px-4 lg:px-0">
       {product.loading && (
@@ -94,7 +99,7 @@ export const ProductList = (props) => {
               {product?.productList?.items?.map((product) => (
                 <div key={product.id} className="rounded-lg cursor-pointer">
                   <img
-                    src={product.img}
+                    src={getAliCdnUrl(product.img)}
                     alt={product.title}
                     className="w-full lg:h-64 md:h-48 sm:h-48 object-cover mb-2 rounded-lg transform transition-transform duration-200 hover:scale-105"
                   />
