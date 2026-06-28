@@ -19,6 +19,7 @@ import { SystemLayout } from "./components/layout/system";
 import { AuthPage } from "./pages/auth";
 import { PageLoadingProvider } from "./components/context/loading";
 import { Verification } from "./pages/verification";
+import { ProductList } from "./pages/productlist";
 
 function App() {
   const auth = useSelector((state) => state.auth);
@@ -66,6 +67,15 @@ function App() {
             element={
               <GlobalLayout>
                 <Product />
+              </GlobalLayout>
+            }
+          />
+
+          <Route
+            path="/product-list"
+            element={
+              <GlobalLayout>
+                <ProductList />
               </GlobalLayout>
             }
           />

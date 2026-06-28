@@ -8,6 +8,7 @@ import shipment from "./home/shipment.png";
 import purchase from "./home/purchase.png";
 import express from "./home/express.png";
 import rfq from "./home/rfq.png";
+import china from "./country/china.svg";
 
 export {
   home_banner_one,
@@ -20,4 +21,5 @@ export {
   purchase,
   express,
   rfq,
+  china,
 };

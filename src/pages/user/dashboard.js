@@ -65,7 +65,8 @@ const demoOrders = [
 
 export const Dashboard = () => {
   useEffect(() => {
-    document.title = "Dashboard - My Shop | Aleeha";
+    document.title =
+      "User Dashboard - Ali Store BD | International Shopping Solution";
   }, []);
 
   const stats = [

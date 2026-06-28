@@ -10,6 +10,11 @@ import { sendOtp, verifyUserEmail } from "../redux/actions";
 export const Verification = (props) => {
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    document.title =
+      "User Verification - Ali Store BD | International Shopping Solution";
+  }, []);
+
   const queryParams = new URLSearchParams(window.location.search);
   const email = queryParams.get("email");
 

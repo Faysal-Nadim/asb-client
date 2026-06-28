@@ -14,6 +14,8 @@ export const userRegistrationWithEmail = (user) => {
           payload: { msg: msg, user: user, verification: verification },
         });
         successToast(msg);
+        window.location.href =
+          "/user/auth/verify-email?email=" + encodeURIComponent(user.email);
       }
     } catch (error) {
       errorToast(error?.response?.data?.msg || "Registration failed");
@@ -21,13 +23,6 @@ export const userRegistrationWithEmail = (user) => {
         type: authConstants.USER_REGISTER_FAILURE,
         payload: { error: error?.response?.data },
       });
-      if (
-        error?.response?.data?.error === "EMAIL_IN_USE" &&
-        error?.response?.status === 403
-      ) {
-        window.location.href =
-          "/user/auth/verify-email?email=" + encodeURIComponent(user.email);
-      }
     }
   };
 };

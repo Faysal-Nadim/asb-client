@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 /**
  * @author
@@ -50,6 +50,11 @@ const demoWishlist = [
 
 export const Wishlist = () => {
   const [items, setItems] = useState(demoWishlist);
+
+  useEffect(() => {
+    document.title =
+      "Wishlist - Ali Store BD | International Shopping Solution";
+  }, []);
 
   const handleRemove = (id) => {
     setItems((prev) => prev.filter((item) => item.id !== id));

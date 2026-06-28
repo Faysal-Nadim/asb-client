@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import {
   cartIcon,
+  imageIcon,
   searchIcon,
   userIcon,
   wishListIcon,
@@ -10,6 +11,11 @@ import { asb_logo_svg } from "../../assets";
 import MegaMenu from "./megamenu";
 import MinimalDropdown from "./profiledropdown";
 import MobileMegaMenu from "./mobilemenu";
+import { LoadingModal } from "../modal/loading";
+import { handleFileUpload } from "../../utils/upload";
+import imageCompression from "browser-image-compression";
+import inventory from "../../redux/helpers/inventory";
+import { CDN } from "../../redux/helpers/urlConfig";
 
 /**
  * @author
@@ -18,14 +24,68 @@ import MobileMegaMenu from "./mobilemenu";
 
 export const Navbar = (props) => {
   const [mobileCatOpen, setMobileCatOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const navIcons = [
     { icon: wishListIcon, link: "/wishlist", title: "Wishlist" },
     { icon: cartIcon, link: "/cart", title: "Cart" },
     { icon: userIcon, link: "", title: "Your Account" },
   ];
+
+  const handleSearch = () => {
+    if (searchQuery) {
+      window.location.href = `/product-list?keyword=${encodeURIComponent(
+        searchQuery,
+      )}&page=1&page_size=20&sort=default`;
+    }
+  };
+
+  const handleImageSearch = async (event) => {
+    setLoading(true);
+    const file = event.target.files[0];
+    console.log("Selected file:", file);
+    if (file) {
+      try {
+        const compressedFile = await compressImage(file);
+        const { key } = await handleFileUpload(compressedFile, "search");
+
+        const res = await inventory.post("/products/search/image/convert", {
+          img_url: `${CDN}/search/${key}`,
+        });
+
+        setLoading(false);
+        window.location.href = `/product-list?image=${encodeURIComponent(
+          res.data.img_url,
+        )}&page=1&page_size=20&sort=default`;
+      } catch (error) {
+        console.error("Error occurred while searching by image:", error);
+        setLoading(false);
+      }
+    }
+  };
+
+  async function compressImage(file) {
+    // If already under 500KB, don't compress
+    if (file.size <= 500 * 1024) {
+      return file;
+    }
+
+    const options = {
+      maxSizeMB: 0.5, // 500KB
+      maxWidthOrHeight: 1920, // resize if necessary
+      useWebWorker: true,
+      initialQuality: 0.9,
+    };
+
+    const compressedFile = await imageCompression(file, options);
+
+    return compressedFile;
+  }
+
   return (
     <>
+      {loading && <LoadingModal text={"Uploading Image..."} />}
       <nav className="w-full bg-primary lg:block sm:hidden">
         <div className="flex items-center justify-between py-2 max-w-[1380px] mx-auto">
           {/* Logo and Categories */}
@@ -48,8 +108,33 @@ export const Navbar = (props) => {
                 type="text"
                 placeholder="Search for anything"
                 className="flex-grow px-4 py-3 text-gray-700 placeholder-gray-400 focus:outline-none"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleSearch();
+                  }
+                }}
               />
-              <button className="bg-[#2F5651] transform transition-transform duration-200 hover:scale-110 p-2 rounded-full mr-1">
+              <label
+                htmlFor="imageSearch"
+                className="transform transition-transform duration-200 hover:scale-110 p-2 rounded mr-1 cursor-pointer"
+              >
+                {imageIcon}
+                <input
+                  id="imageSearch"
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleImageSearch}
+                />
+              </label>
+
+              <button
+                onClick={handleSearch}
+                type="button"
+                className="bg-[#2F5651] transform transition-transform duration-200 hover:scale-110 p-2 rounded-r-full mr-1"
+              >
                 {searchIcon}
               </button>
             </div>
@@ -130,12 +215,37 @@ export const Navbar = (props) => {
           </button>
 
           {/* Search bar */}
-          <div className="flex items-center border rounded-full px-3 flex-1">
+          <div className="flex items-center border rounded-full pl-3 pr-1 flex-1">
             <input
               className="flex-1 py-2 outline-none bg-transparent"
               placeholder="Search for anything"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSearch();
+                }
+              }}
             />
-            {searchIcon}
+
+            <label className="transform transition-transform duration-200 hover:scale-110 py-2 rounded cursor-pointer mr-1">
+              {imageIcon}
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleImageSearch}
+                onClick={(e) => e.stopPropagation()} // Prevents the click from propagating to the parent div
+              />
+            </label>
+
+            <button
+              onClick={handleSearch}
+              type="button"
+              className="bg-[#2F5651] transform transition-transform duration-200 hover:scale-110 p-1 rounded-r-full "
+            >
+              {searchIcon}
+            </button>
           </div>
         </div>
 

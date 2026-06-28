@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import axiosInstance from "../../redux/helpers/axios";
-import axios from "axios";
 import { getUserByToken } from "../../redux/actions";
 import { successToast } from "../../utils/toast";
+import { handleFileUpload } from "../../utils/upload";
 
 export const ProfileImgModal = ({ isOpen, onClose }) => {
   const dispatch = useDispatch();
@@ -22,18 +22,7 @@ export const ProfileImgModal = ({ isOpen, onClose }) => {
     if (!profileImg) return;
     setUploading(true);
     try {
-      const res = await axiosInstance.get(
-        `/user/services/get-presigned-url?fileName=${profileImg.name}&contentType=${profileImg.type}&reqType=profileImage`,
-      );
-
-      const { uploadUrl, key, path } = res.data;
-
-      await axios.put(uploadUrl, profileImg, {
-        headers: {
-          "Content-Type": profileImg.type,
-          "Cache-Control": "public, max-age=31536000, immutable",
-        },
-      });
+      const { key, path } = await handleFileUpload(profileImg, "user");
 
       await axiosInstance.post("/user/services/update-profile-image", {
         key,

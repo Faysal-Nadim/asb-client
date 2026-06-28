@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Hero } from "../components/home/hero";
 import { Trending } from "../components/home/trending";
 import { Popular } from "../components/home/popular";
@@ -15,19 +15,23 @@ import { OurServices } from "../components/home/services";
 export const Home = () => {
   const { pageLoading } = usePageLoading();
 
+  useEffect(() => {
+    document.title = "Home - Ali Store BD | International Shopping Solution";
+  }, []);
+
   return (
     <div className="relative py-4 max-w-[1380px] mx-auto">
       {pageLoading && <LoadingModal text="Loading..." />}
 
       <Hero />
 
-      <div className="my-8 sm:mx-4 lg:mx-0 md:mx-0">
+      <Popular />
+
+      <div className="sm:mx-4 lg:mx-0 md:mx-0">
         <OurServices />
       </div>
 
       <Trending />
-
-      <Popular />
 
       <Deals />
     </div>

@@ -35,6 +35,10 @@ export const Cart = ({ maxQty = 10, onAddToCart = () => {} }) => {
     window.scrollTo(0, 0);
   }, []);
 
+  useEffect(() => {
+    document.title = "Cart - Ali Store BD | International Shopping Solution";
+  }, []);
+
   const [qty, setQty] = useState("1");
 
   const qtyOptions = useMemo(
@@ -43,7 +47,7 @@ export const Cart = ({ maxQty = 10, onAddToCart = () => {} }) => {
         value: String(i + 1),
         label: String(i + 1),
       })),
-    [maxQty]
+    [maxQty],
   );
 
   return (
