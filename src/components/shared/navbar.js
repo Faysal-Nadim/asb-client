@@ -3,6 +3,7 @@ import {
   cartIcon,
   imageIcon,
   searchIcon,
+  searchIconSmall,
   userIcon,
   wishListIcon,
 } from "../../assets/SvgIcons";
@@ -47,7 +48,7 @@ export const Navbar = (props) => {
     console.log("Selected file:", file);
     if (file) {
       try {
-        const compressedFile = await compressImage(file);
+        const compressedFile = await compressTo500KB(file);
         const { key } = await handleFileUpload(compressedFile, "search");
 
         const res = await inventory.post("/products/search/image/convert", {
@@ -65,22 +66,27 @@ export const Navbar = (props) => {
     }
   };
 
-  async function compressImage(file) {
-    // If already under 500KB, don't compress
-    if (file.size <= 500 * 1024) {
-      return file;
+  async function compressTo500KB(file) {
+    if (file.size <= 500 * 1024) return file;
+
+    let quality = 0.9;
+    let compressed = file;
+
+    while (quality > 0.1) {
+      compressed = await imageCompression(file, {
+        maxWidthOrHeight: 1920,
+        initialQuality: quality,
+        useWebWorker: true,
+      });
+
+      if (compressed.size <= 500 * 1024) {
+        break;
+      }
+
+      quality -= 0.1;
     }
 
-    const options = {
-      maxSizeMB: 0.5, // 500KB
-      maxWidthOrHeight: 1920, // resize if necessary
-      useWebWorker: true,
-      initialQuality: 0.9,
-    };
-
-    const compressedFile = await imageCompression(file, options);
-
-    return compressedFile;
+    return compressed;
   }
 
   return (
@@ -228,7 +234,7 @@ export const Navbar = (props) => {
               }}
             />
 
-            <label className="transform transition-transform duration-200 hover:scale-110 py-2 rounded cursor-pointer mr-1">
+            <label className="transform transition-transform duration-200 hover:scale-110 py-2 rounded cursor-pointer mr-2">
               {imageIcon}
               <input
                 type="file"
@@ -242,9 +248,9 @@ export const Navbar = (props) => {
             <button
               onClick={handleSearch}
               type="button"
-              className="bg-[#2F5651] transform transition-transform duration-200 hover:scale-110 p-1 rounded-r-full "
+              className="bg-[#2F5651] transform transition-transform duration-200 hover:scale-110 p-2 rounded-r-full "
             >
-              {searchIcon}
+              {searchIconSmall}
             </button>
           </div>
         </div>

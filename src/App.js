@@ -20,6 +20,7 @@ import { AuthPage } from "./pages/auth";
 import { PageLoadingProvider } from "./components/context/loading";
 import { Verification } from "./pages/verification";
 import { ProductList } from "./pages/productlist";
+import { RequestShipment } from "./pages/shipment";
 
 function App() {
   const auth = useSelector((state) => state.auth);
@@ -76,6 +77,15 @@ function App() {
             element={
               <GlobalLayout>
                 <ProductList />
+              </GlobalLayout>
+            }
+          />
+
+          <Route
+            path="/request-shipment"
+            element={
+              <GlobalLayout>
+                <RequestShipment />
               </GlobalLayout>
             }
           />

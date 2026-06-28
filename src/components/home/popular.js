@@ -13,7 +13,7 @@ export const Popular = (props) => {
   return (
     <div className="py-4 w-full mx-auto">
       <div className="sm:mx-4 lg:mx-0 md:mx-0">
-        <h2 className="text-2xl font-semibold">Popular Categories</h2>
+        <h2 className="text-lg font-bold">Popular Categories</h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-5 md:grid-cols-5 lg:grid-cols-10 gap-4 mt-2">
           {categories.map((item) => (

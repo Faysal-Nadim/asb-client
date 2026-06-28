@@ -134,6 +134,23 @@ export const searchIcon = (
   </svg>
 );
 
+export const searchIconSmall = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    strokeWidth={1.5}
+    stroke="currentColor"
+    className="size-4 text-white"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M21 21l-6-6m2.25-4.5a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z"
+    />
+  </svg>
+);
+
 export const trippleBarIcon = (
   <svg
     xmlns="http://www.w3.org/2000/svg"
