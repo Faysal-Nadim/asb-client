@@ -20,7 +20,7 @@ export const OurServices = (props) => {
       name: "Request Shipment",
       description: "We provide fast and reliable shipment services.",
       image: shipment,
-      to: "/request-shipment",
+      to: "/request-shipment?step=1",
     },
     {
       name: "Purchase Order",
